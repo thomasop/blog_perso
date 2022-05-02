@@ -6,9 +6,9 @@ language: php
     sudo: required
     branches:
       only:
-      - master
-      - dev
-      - phpunit
+        - master
+        - dev
+        - phpunit
     before_install:
     - cp .env.travis .env.test
     install:
