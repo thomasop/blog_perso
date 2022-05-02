@@ -4,10 +4,6 @@ language: php
     services:
     - mysql
     sudo: required
-    branches:
-        only:
-            - master
-            - phpunit
     before_install:
     - cp .env.travis .env.test
     install:
