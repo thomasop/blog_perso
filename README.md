@@ -30,4 +30,4 @@ Install composer with composer install and init the projet with composer init in
 At the root of your project use the command php bin/console server:start -d
 
 ### Test
-For run test: make tests
+For run test: make tests 
