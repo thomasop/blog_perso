@@ -101,6 +101,13 @@ class Post
         return $this->slug;
     }
 
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+    
     public function getUser(): ?User
     {
         return $this->user;
