@@ -18,6 +18,13 @@ class Image
     #[Assert\NotBlank(message: "Ce champ est requis !")]
     private $name;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
+    #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'images')]
+    private $post;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +38,30 @@ class Image
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
 
         return $this;
     }

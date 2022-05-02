@@ -22,6 +22,14 @@ class Friend
     #[Assert\DateTime]
     private $friendAt;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'expediteur')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $send;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'destinataire')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $receive;
+
     public function __construct()
     {
         $this->statut = 0;
@@ -52,6 +60,30 @@ class Friend
     public function setFriendAt(?\DateTimeInterface $friendAt): self
     {
         $this->friendAt = $friendAt;
+
+        return $this;
+    }
+
+    public function getSend(): ?User
+    {
+        return $this->send;
+    }
+
+    public function setSend(?User $send): self
+    {
+        $this->send = $send;
+
+        return $this;
+    }
+
+    public function getReceive(): ?User
+    {
+        return $this->receive;
+    }
+
+    public function setReceive(?User $receive): self
+    {
+        $this->receive = $receive;
 
         return $this;
     }

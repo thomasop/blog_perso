@@ -36,14 +36,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Regex(pattern: "#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#", match: true, message: "Mot de passe incorrect: Une lettre en majuscule, minuscule, un chiffre et caractère speciaux attendu ainsi que 8 caractères minimum!")]
     private $password;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class, orphanRemoval: true)]
+    private $comments;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, orphanRemoval: true)]
+    private $posts;
+
     #[ORM\Column(type: 'string', length: 255)]
     private $avatar;
 
     #[ORM\Column(type: 'boolean')]
     private $enabled;
 
+    #[ORM\OneToMany(mappedBy: 'send', targetEntity: Message::class, orphanRemoval: true)]
+    private $send;
+
+    #[ORM\OneToMany(mappedBy: 'receive', targetEntity: Message::class, orphanRemoval: true)]
+    private $receive;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $token;
+
+    #[ORM\OneToMany(mappedBy: 'send', targetEntity: Friend::class, orphanRemoval: true)]
+    private $expediteur;
+
+    #[ORM\OneToMany(mappedBy: 'receive', targetEntity: Friend::class, orphanRemoval: true)]
+    private $destinataire;
 
     #[ORM\Column(type: 'boolean')]
     private $admin;
@@ -68,6 +86,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $sexe;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Image::class, orphanRemoval: true)]
+    private $images;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Video::class, orphanRemoval: true)]
+    private $videos;
+
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
@@ -76,6 +100,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->admin = false;
         $this->demandeAdmin = false;
         $this->message = null;
+        $this->comments = new ArrayCollection();
+        $this->posts = new ArrayCollection();
+        $this->send = new ArrayCollection();
+        $this->receive = new ArrayCollection();
+        $this->expediteur = new ArrayCollection();
+        $this->destinataire = new ArrayCollection();
+        $this->images = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function __toString() {
@@ -171,6 +203,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Post>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $post): self
+    {
+        if ($this->posts->removeElement($post)) {
+            // set the owning side to null (unless already changed)
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getAvatar(): ?string
     {
         return $this->avatar;
@@ -195,6 +287,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getSend(): Collection
+    {
+        return $this->send;
+    }
+
+    public function addSend(Message $send): self
+    {
+        if (!$this->send->contains($send)) {
+            $this->send[] = $send;
+            $send->setSend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSend(Message $send): self
+    {
+        if ($this->send->removeElement($send)) {
+            // set the owning side to null (unless already changed)
+            if ($send->getSend() === $this) {
+                $send->setSend(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getReceive(): Collection
+    {
+        return $this->receive;
+    }
+
+    public function addReceive(Message $receive): self
+    {
+        if (!$this->receive->contains($receive)) {
+            $this->receive[] = $receive;
+            $receive->setReceive($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceive(Message $receive): self
+    {
+        if ($this->receive->removeElement($receive)) {
+            // set the owning side to null (unless already changed)
+            if ($receive->getReceive() === $this) {
+                $receive->setReceive(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getToken(): ?string
     {
         return $this->token;
@@ -203,6 +355,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friend>
+     */
+    public function getExpediteur(): Collection
+    {
+        return $this->expediteur;
+    }
+
+    public function addExpediteur(Friend $expediteur): self
+    {
+        if (!$this->expediteur->contains($expediteur)) {
+            $this->expediteur[] = $expediteur;
+            $expediteur->setSend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpediteur(Friend $expediteur): self
+    {
+        if ($this->expediteur->removeElement($expediteur)) {
+            // set the owning side to null (unless already changed)
+            if ($expediteur->getSend() === $this) {
+                $expediteur->setSend(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Friend>
+     */
+    public function getDestinataire(): Collection
+    {
+        return $this->destinataire;
+    }
+
+    public function addDestinataire(Friend $destinataire): self
+    {
+        if (!$this->destinataire->contains($destinataire)) {
+            $this->destinataire[] = $destinataire;
+            $destinataire->setReceive($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDestinataire(Friend $destinataire): self
+    {
+        if ($this->destinataire->removeElement($destinataire)) {
+            // set the owning side to null (unless already changed)
+            if ($destinataire->getReceive() === $this) {
+                $destinataire->setReceive(null);
+            }
+        }
 
         return $this;
     }
@@ -287,6 +499,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSexe(?bool $sexe): self
     {
         $this->sexe = $sexe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getUser() === $this) {
+                $image->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Video>
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getUser() === $this) {
+                $video->setUser(null);
+            }
+        }
 
         return $this;
     }

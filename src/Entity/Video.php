@@ -18,6 +18,13 @@ class Video
     #[Assert\Regex(pattern: "#(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?#", match: true, message: "Veuillez insérer un lien Youtube valide !")]
     private $url;
 
+    #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'videos')]
+    private $post;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'videos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +38,30 @@ class Video
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

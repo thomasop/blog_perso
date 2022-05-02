@@ -22,6 +22,14 @@ class Message
     #[ORM\Column(type: 'datetime')]
     private $createdAt;
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'send')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $send;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'receive')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $receive;
+
     public function __construct()
     {
         $this->createdAt = new DateTime('now');
@@ -56,6 +64,30 @@ class Message
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getSend(): ?User
+    {
+        return $this->send;
+    }
+
+    public function setSend(?User $send): self
+    {
+        $this->send = $send;
+
+        return $this;
+    }
+
+    public function getReceive(): ?User
+    {
+        return $this->receive;
+    }
+
+    public function setReceive(?User $receive): self
+    {
+        $this->receive = $receive;
 
         return $this;
     }
