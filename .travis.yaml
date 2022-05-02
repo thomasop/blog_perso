@@ -5,10 +5,10 @@ language: php
     - mysql
     sudo: required
     branches:
-        only:
-        - master
-        - dev
-        - phpunit
+      only:
+      - master
+      - dev
+      - phpunit
     before_install:
     - cp .env.travis .env.test
     install:
