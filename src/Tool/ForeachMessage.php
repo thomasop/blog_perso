@@ -4,12 +4,6 @@ namespace App\Tool;
 
 class ForeachMessage
 {
-    /**
-     * Function for sarch conversation message
-     *
-     * @param array $message
-     * @return array
-     */
     public function foreach($message)
     {
         $element1 = [];
@@ -19,7 +13,6 @@ class ForeachMessage
             $mail = (string)$value->getReceive()->getEmail();
             $element1[] = $test;
             $array1[] = $mail;
-            
         }
         $element2 = [];
         $array2 = [];
@@ -28,7 +21,6 @@ class ForeachMessage
             $mail = (string)$value->getSend()->getEmail();
             $element2[] = $test;
             $array2[] = $mail;
-            
         }
         $nombre1 = array_count_values($element1);
         $nombre2 = array_count_values($element2);
@@ -36,11 +28,11 @@ class ForeachMessage
         $nombre4 = array_count_values($array2);
         $final1 = [];
         foreach ($nombre1 as $cle => $value) {
-           $final1[] = $cle;
+            $final1[] = $cle;
         }
         $final2 = [];
         foreach ($nombre2 as $cle => $value) {
-           $final2[] = $cle;
+            $final2[] = $cle;
         }
         $final3 = [];
         foreach ($nombre3 as $cle => $value) {

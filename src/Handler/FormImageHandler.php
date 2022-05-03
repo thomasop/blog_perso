@@ -13,25 +13,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class FormImageHandler
 {
-    /**
-     * @var DeleteFile
-     */
+    /** @var DeleteFile */
     private $deleteFile;
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FileUploader
-     */
+    /** @var FileUploader */
     private $fileUploader;
 
     public function __construct(DeleteFile $deleteFile, EntityManager $entityManager, RequestStack $request, TokenStorageInterface $tokenStorage, FileUploader $fileUploader)
@@ -49,13 +39,6 @@ class FormImageHandler
         $this->entityManager->remove($image);
     }
 
-    /**
-     * Function for add new image
-     *
-     * @param Image $image
-     * @param FormInterface $form
-     * @return boolean
-     */
     public function add(Image $image, FormInterface $form): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -67,17 +50,9 @@ class FormImageHandler
             $this->entityManager->Add($image);
             return true;
         }
-       return false;
+        return false;
     }
 
-    /**
-     * Function for add new image in post
-     *
-     * @param Image $image
-     * @param FormInterface $form
-     * @param Post $post
-     * @return boolean
-     */
     public function addPost(Image $image, FormInterface $form, Post $post): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -90,6 +65,6 @@ class FormImageHandler
             $this->entityManager->Add($image);
             return true;
         }
-       return false;
+        return false;
     }
 }

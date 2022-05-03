@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Tool\Friend;
 use App\Entity\Image;
-use App\Entity\Video;
 use App\Form\PostType;
 use App\Tool\DeleteFile;
 use App\Form\PosteditType;
@@ -27,17 +26,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class PostController extends AbstractController
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var DeleteFile
-     */
+    /** @var DeleteFile */
     private $deleteFile;
-    /**
-     * @var FormPostHandler
-     */
+    /** @var FormPostHandler */
     private $formPostHandler;
 
     public function __construct(TokenStorageInterface $tokenStorage, DeleteFile $deleteFile, FormPostHandler $formPostHandler)
@@ -46,16 +39,7 @@ class PostController extends AbstractController
         $this->deleteFile = $deleteFile;
         $this->formPostHandler = $formPostHandler;
     }
-    
-    /**
-     * Function for diplay all post and create post
-     *
-     * @param PostRepository $postRepository
-     * @param ManagerRegistry $doctrine
-     * @param MessageRepository $messageRepository
-     * @param Request $request
-     * @return Response
-     */
+
     #[route('', name: 'home')]
     #[IsGranted("ROLE_USER", statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
     public function index(PostRepository $postRepository, ManagerRegistry $doctrine, MessageRepository $messageRepository, Request $request): Response
@@ -77,12 +61,6 @@ class PostController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for edit post
-     *
-     * @param Post $post
-     * @return Response
-     */
     #[route('/modification/{slug}', name: 'post_edit', methods: ["GET", "POST"])]
     #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
@@ -92,14 +70,13 @@ class PostController extends AbstractController
         if ($currentId == $post->getUser()) {
             if (!$post) {
                 throw $this->createNotFoundException('Pas de commentaire trouvé avec l\'id '.$post->getId());
-            }
-            else {
+            } else {
                 $form = $this->createForm(PosteditType::class, $post);
                 if ($this->formPostHandler->edit($form) == true) {
                     $this->addFlash(
                         'success',
                         'Post modifié!'
-                        );
+                    );
                     return $this->redirectToRoute('comment', ['slug' => $post->getSlug(), 'page' => 1], Response::HTTP_SEE_OTHER);
                 }
                 return $this->renderForm('post/edit.html.twig', [
@@ -107,25 +84,15 @@ class PostController extends AbstractController
                     'form' => $form,
                 ]);
             }
-        }
-        else {
+        } else {
             $this->addFlash(
-            'success',
-            'Vous n\'avez pas accès à cette page!'
+                'success',
+                'Vous n\'avez pas accès à cette page!'
             );
-        return $this->redirectToRoute('home');
+            return $this->redirectToRoute('home');
         }
     }
 
-    /**
-     * Function for delete post
-     *
-     * @param Post $post
-     * @param Request $request
-     * @param EntityManagerInterface $entityManagerInterface
-     * @param ManagerRegistry $doctrine
-     * @return Response
-     */
     #[route('/suppression/{slug}', name: 'post_delete')]
     #[ParamConverter('post', options: ['mapping' => ['slug' => 'slug']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
@@ -135,8 +102,7 @@ class PostController extends AbstractController
         if ($currentId == $post->getUser()) {
             if (!$post) {
                 throw $this->createNotFoundException('Pas de commentaire trouvé avec l\'id '.$post->getId());
-            }
-            else {
+            } else {
                 if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
                     $image = $doctrine->getManager()->getRepository(Image::class)->findBy(['post' => $post->getId()]);
                     foreach ($image as $i) {

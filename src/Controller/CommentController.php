@@ -13,8 +13,6 @@ use App\Repository\CommentRepository;
 use App\Repository\MessageRepository;
 use App\Repository\VideoRepository;
 use App\Tool\EntityManager as ToolEntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,7 +26,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 class CommentController extends AbstractController
 {
+    /** @var TokenStorageInterface */
     private $tokenStorage;
+    /** @var FormCommentHandler */
     private $formCommentHandler;
 
     public function __construct(TokenStorageInterface $tokenStorage, FormCommentHandler $formCommentHandler)
@@ -36,18 +36,7 @@ class CommentController extends AbstractController
         $this->tokenStorage = $tokenStorage;
         $this->formCommentHandler = $formCommentHandler;
     }
-    
-    /**
-     * Function for display one post and all comment
-     *
-     * @param Post $post
-     * @param int $page
-     * @param CommentRepository $commentRepository
-     * @param ImageRepository $imageRepository
-     * @param MessageRepository $messageRepository
-     * @param VideoRepository $videoRepository
-     * @return Response
-     */
+
     #[route('/affichages/{slug}/{page}', name: 'comment')]
     #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
@@ -60,8 +49,7 @@ class CommentController extends AbstractController
         $form = $this->createForm(CommentType::class, $comment);
         $image = $imageRepository->findBy(['post' => $post], ['id' => 'ASC']);
         $video = $videoRepository->findBy(['post' => $post], ['id' => 'ASC']);
-        if ($this->formCommentHandler->post($form, $comment, $post) == true)
-        {
+        if ($this->formCommentHandler->post($form, $comment, $post) == true) {
             $this->addFlash(
                 'success',
                 'Commentaire ajouté!'
@@ -79,13 +67,6 @@ class CommentController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for edit comment
-     *
-     * @param Post $post
-     * @param Comment $comment
-     * @return Response
-     */
     #[route('/modification/{id}/{slug}', name: 'comment_edit', methods: ["GET", "POST"])]
     #[ParamConverter('comment', class: 'App\Entity\Comment', options: ['mapping' => ['id' => 'id']])]
     #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
@@ -96,8 +77,7 @@ class CommentController extends AbstractController
         if ($currentId == $comment->getUser()) {
             if (!$comment) {
                 throw $this->createNotFoundException('Pas de commentaire trouvé avec l\'id '.$comment->getId());
-            }
-            else {
+            } else {
                 $form = $this->createForm(CommentType::class, $comment);
                 if ($this->formCommentHandler->edit($form) == true) {
                     return $this->redirectToRoute('comment', ['slug' => $post->getSlug(), 'page' => 1], Response::HTTP_SEE_OTHER);
@@ -108,7 +88,7 @@ class CommentController extends AbstractController
                     'post' => $post,
                 ]);
             }
-        }    
+        }
         $this->addFlash(
             'success',
             ' Vous n\'avez pas acces à cette page!'
@@ -116,15 +96,6 @@ class CommentController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * Function for delete comment
-     *
-     * @param Request $request
-     * @param Comment $comment
-     * @param Post $post
-     * @param ToolEntityManager $toolEntityManager
-     * @return Response
-     */
     #[route('/suppression/{id}/{slug}', name: 'comment_delete')]
     #[ParamConverter('comment', class: 'App\Entity\comment', options: ['mapping' => ['id' => 'id']])]
     #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
@@ -135,8 +106,7 @@ class CommentController extends AbstractController
         if ($currentId == $comment->getUser()) {
             if (!$comment) {
                 throw $this->createNotFoundException('Pas de commentaire trouvé avec l\'id '.$comment->getId());
-            }
-            else {
+            } else {
                 if ($this->isCsrfTokenValid('delete' . $comment->getId(), $request->request->get('_token'))) {
                     $entityManager->remove($comment);
                     $this->addFlash(

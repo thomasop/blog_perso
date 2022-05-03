@@ -49,7 +49,8 @@ class MessageRepository extends ServiceEntityRepository
         }
     }
 
-    public function allMessage($currentId, $user) {
+    public function allMessage($currentId, $user)
+    {
         $qb = $this->createQueryBuilder('m');
         $qb->select('m')
         ->where($qb->expr()->andX(
@@ -67,7 +68,8 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function lastMessage($currentId, $user) {
+    public function lastMessage($currentId, $user)
+    {
         $qb = $this->createQueryBuilder('m');
         $qb->select('m')
         ->where($qb->expr()->andX(
@@ -87,7 +89,8 @@ class MessageRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function allConv($currentId) {
+    public function allConv($currentId)
+    {
         $qb = $this->createQueryBuilder('m');
         $qb->select('m')
         ->where($qb->expr()->andX(

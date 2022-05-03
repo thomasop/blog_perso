@@ -4,13 +4,6 @@ namespace App\Tool;
 
 class Paging
 {
-    /**
-     * Function for paging comment
-     *
-     * @param int $page
-     * @param array $comments
-     * @return array $paging 
-     */
     public function pagingComments($page, $comments)
     {
         $paging = array(

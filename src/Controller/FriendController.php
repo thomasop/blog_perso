@@ -17,34 +17,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class FriendController extends AbstractController 
+class FriendController extends AbstractController
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FormFriendHandler
-     */
+    /** @var FormFriendHandler */
     private $formFriendHandler;
-    
+
     public function __construct(TokenStorageInterface $tokenStorage, FormFriendHandler $formFriendHandler)
     {
         $this->tokenStorage = $tokenStorage;
         $this->formFriendHandler = $formFriendHandler;
     }
 
-    /**
-     * Function for add friend
-     *
-     * @param User $user
-     * @return Response
-     */
     #[route('/ami/{prenom}-{nom}', name: 'friend')]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['prenom' => 'prenom']])]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['nom' => 'nom']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
-    public function add(User $user): Response 
+    public function add(User $user): Response
     {
         $friend = new Friend();
         $message = new Message();
@@ -58,14 +48,8 @@ class FriendController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for show all friends
-     *
-     * @param FriendRepository $friendRepository
-     * @return Response
-     */
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
-    public function all(FriendRepository $friendRepository): Response 
+    public function all(FriendRepository $friendRepository): Response
     {
         $currentId = $this->tokenStorage->getToken()->getUser();
         $demandeEnvoyé = $friendRepository->demande($currentId);
@@ -77,19 +61,12 @@ class FriendController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for accept user
-     *
-     * @param User $user
-     * @param Request $request
-     * @return Response
-     */
     #[route('/accept/{prenom}-{nom}/{id}', name: 'friend_accept')]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['prenom' => 'prenom']])]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['nom' => 'nom']])]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['id' => 'id']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
-    public function accept(User $user, Request $request): Response 
+    public function accept(User $user, Request $request): Response
     {
         if ($this->isCsrfTokenValid('accept', $request->request->get('_token'))) {
             $this->addFlash(
@@ -105,15 +82,9 @@ class FriendController extends AbstractController
         return $this->redirectToRoute('profile', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * Function for show all friends
-     *
-     * @param MessageRepository $messageRepository
-     * @return Response
-     */
     #[route('/amis/afichages', name: 'friend_shows')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
-    public function shows(MessageRepository $messageRepository): Response 
+    public function shows(MessageRepository $messageRepository): Response
     {
         $list = new \App\Tool\Friend($this->tokenStorage);
         return $this->render('friend/shows.html.twig', [

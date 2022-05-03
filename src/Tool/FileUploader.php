@@ -8,13 +8,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class FileUploader
 {
-    /**
-     * @var SluggerInterface
-     */
+    /** @var SluggerInterface */
     private $slugger;
-    /**
-     * @var $targetDirectory
-     */
+    /** @var $targetDirectory */
     private $targetDirectory;
 
     public function __construct($targetDirectory, SluggerInterface $slugger)
@@ -23,12 +19,6 @@ class FileUploader
         $this->targetDirectory = $targetDirectory;
     }
 
-    /**
-     * Function for upload image
-     *
-     * @param UploadedFile $file
-     * @return void
-     */
     public function upload(UploadedFile $file)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -44,11 +34,6 @@ class FileUploader
         return $newFilename;
     }
 
-    /**
-     * Function get directory image in config/services.yaml
-     *
-     * @return void
-     */
     public function getTargetDirectory()
     {
         return $this->targetDirectory;

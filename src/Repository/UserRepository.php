@@ -64,21 +64,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function searchin($mots) {
+    public function searchin($mots)
+    {
         $query = $this->createQueryBuilder('u');
-        if($mots != null) {
+        if ($mots != null) {
             $query->select('u')
             ->Where('MATCH_AGAINST(u.prenom) AGAINST(:prenom boolean)>0')
             ->orWhere('MATCH_AGAINST(u.nom) AGAINST(:prenom boolean)>0')
             ->andWhere('u.enabled = 1')
             ->setParameters(new ArrayCollection([
-                new Parameter('prenom','*' . $mots . '*'),
+                new Parameter('prenom', '*' . $mots . '*'),
             ]));
         }
         return $query->getQuery()->getResult();
     }
 
-    public function search($prenom, $nom, $demandeAdmin) {
+    public function search($prenom, $nom, $demandeAdmin)
+    {
         $query = $this->createQueryBuilder('u');
         // user with prenom and nom
         if (($prenom != null) && ($nom != null)) {
@@ -86,8 +88,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->Where('MATCH_AGAINST(u.prenom) AGAINST(:prenom boolean)>0')
             ->andWhere('MATCH_AGAINST(u.nom) AGAINST(:nom boolean)>0')
             ->setParameters(new ArrayCollection([
-                new Parameter('prenom','*' . $prenom . '*'),
-                new Parameter('nom','*' . $nom . '*')
+                new Parameter('prenom', '*' . $prenom . '*'),
+                new Parameter('nom', '*' . $nom . '*')
             ]));
             return $query->getQuery()->getResult();
         }
@@ -103,8 +105,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->andWhere('MATCH_AGAINST(u.nom) AGAINST(:nom boolean)>0')
             ->andWhere('u.demandeAdmin = :demandeAdmin')
             ->setParameters(new ArrayCollection([
-                new Parameter('prenom','*' . $prenom . '*'),
-                new Parameter('nom','*' . $nom . '*'),
+                new Parameter('prenom', '*' . $prenom . '*'),
+                new Parameter('nom', '*' . $nom . '*'),
                 new Parameter('demandeAdmin', $demandeAdmin)
             ]));
             return $query->getQuery()->getResult();
@@ -127,7 +129,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ]));
             return $query->getQuery()->getResult();
         }
-        
     }
     // /**
     //  * @return User[] Returns an array of User objects

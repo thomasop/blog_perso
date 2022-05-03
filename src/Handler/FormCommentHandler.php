@@ -11,17 +11,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class FormCommentHandler
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
 
     public function __construct(TokenStorageInterface $tokenStorage, RequestStack $request, EntityManager $entityManager)
@@ -30,15 +24,7 @@ class FormCommentHandler
         $this->entityManager = $entityManager;
         $this->request = $request;
     }
-    
-    /**
-     * Function for add new comment
-     *
-     * @param FormInterface $form
-     * @param Comment $comment
-     * @param Post $post
-     * @return boolean
-     */
+
     public function post(FormInterface $form, Comment $comment, Post $post): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -51,12 +37,6 @@ class FormCommentHandler
         return false;
     }
 
-    /**
-     * Function for edit comment
-     *
-     * @param FormInterface $form
-     * @return boolean
-     */
     public function edit(FormInterface $form): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());

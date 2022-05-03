@@ -11,8 +11,6 @@ use App\Handler\FormMessageHandler;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -22,17 +20,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class MessageController extends AbstractController
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FormMessageHandler
-     */
+    /** @var FormMessageHandler */
     private $formMessageHandler;
-    /**
-     * @var ForeachMessage
-     */
+    /** @var ForeachMessage */
     private $foreachMessage;
 
     public function __construct(TokenStorageInterface $tokenStorage, FormMessageHandler $formMessageHandler, ForeachMessage $foreachMessage)
@@ -42,12 +34,6 @@ class MessageController extends AbstractController
         $this->foreachMessage = $foreachMessage;
     }
 
-    /**
-     * Function for send message
-     *
-     * @param Post $post
-     * @return Response
-     */
     #[route('/message/{prenom}-{nom}', name: 'message')]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['prenom' => 'prenom']])]
     #[ParamConverter('user', class: 'App\Entity\User', options: ['mapping' => ['nom' => 'nom']])]

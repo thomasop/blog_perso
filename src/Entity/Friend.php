@@ -34,7 +34,7 @@ class Friend
     {
         $this->statut = 0;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

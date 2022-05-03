@@ -49,7 +49,8 @@ class FriendRepository extends ServiceEntityRepository
         }
     }
 
-    public function demande($currentId) {
+    public function demande($currentId)
+    {
         $qb = $this->createQueryBuilder('f');
         $qb->select('f')
         ->where($qb->expr()->andX(
@@ -61,7 +62,8 @@ class FriendRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function recu($currentId) {
+    public function recu($currentId)
+    {
         $qb = $this->createQueryBuilder('f');
         $qb->select('f')
         ->where($qb->expr()->andX(
@@ -73,7 +75,8 @@ class FriendRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function envoyerPar($currentId, $user) {
+    public function envoyerPar($currentId, $user)
+    {
         $qb = $this->createQueryBuilder('f');
         $qb->select('f')
         ->where($qb->expr()->andX(
@@ -91,7 +94,8 @@ class FriendRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function all($currentId) {
+    public function all($currentId)
+    {
         $qb = $this->createQueryBuilder('f');
         $qb->select('f')
         ->where($qb->expr()->andX(

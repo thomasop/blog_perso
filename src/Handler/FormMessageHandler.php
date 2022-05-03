@@ -11,17 +11,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class FormMessageHandler
 {
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
     public function __construct(RequestStack $request, EntityManager $entityManager, TokenStorageInterface $tokenStorage)
@@ -31,14 +25,6 @@ class FormMessageHandler
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * Function for send message
-     *
-     * @param FormInterface $form
-     * @param Message $messageform
-     * @param User $user
-     * @return boolean
-     */
     public function index(FormInterface $form, Message $messageform, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());

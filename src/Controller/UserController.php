@@ -18,9 +18,7 @@ use App\Repository\FriendRepository;
 use App\Repository\MessageRepository;
 use App\Repository\VideoRepository;
 use App\Tool\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Laminas\Code\Generator\EnumGenerator\Name;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
@@ -28,26 +26,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserController extends AbstractController
 {
-    
-    /**
-     * @var UserPasswordHasherInterface
-     */
+    /** @var UserPasswordHasherInterface */
     private $passwordEncoder;
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FormUserHandler
-     */
+    /** @var FormUserHandler */
     private $formUserHandler;
-    
+
     public function __construct(UserPasswordHasherInterface $passwordEncoder, TokenStorageInterface $tokenStorage, FormUserHandler $formUserHandler)
     {
         $this->passwordEncoder = $passwordEncoder;
@@ -55,13 +45,6 @@ class UserController extends AbstractController
         $this->formUserHandler = $formUserHandler;
     }
 
-    /**
-     * Function for display all user
-     *
-     * @param UserRepository $userRepository
-     * @param Request $request
-     * @return Response
-     */
     #[route('/user/display', name: 'user_index')]
     #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function index(UserRepository $userRepository, Request $request): Response
@@ -96,14 +79,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for add new user
-     *
-     * @param Request $request
-     * @param EntityManager $entityManager
-     * @param MailerInterface $mailer
-     * @return Response
-     */
     #[route('/register', name: 'register', methods: ["GET", "POST"])]
     public function new(Request $request, EntityManager $entityManager, MailerInterface $mailer): Response
     {
@@ -168,11 +143,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user forgot password
-     *
-     * @return Response
-     */
     #[route('/forgot-password', name: 'forgot_password')]
     public function forgotPassword(): Response
     {
@@ -197,13 +167,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user reset password
-     * 
-     * @param $token
-     * @param UserRepository $userRepository
-     * @return Response
-     */
     #[route('/reset-password/{token}', name: 'reset_password')]
     public function resetPassword($token, UserRepository $userRepository): Response
     {
@@ -216,15 +179,13 @@ class UserController extends AbstractController
                     'Mot de passe modifié !'
                 );
                 return $this->redirectToRoute('login');
-            }
-            elseif ($this->formUserHandler->resetPassword($form, $user) == 'erreur') {
+            } elseif ($this->formUserHandler->resetPassword($form, $user) == 'erreur') {
                 $this->addFlash(
                     'success',
                     'Mot de passe incorrect: Une lettre en majuscule, minuscule, un chiffre et caractère speciaux attendu ainsi que 8 caractères minimum!'
                 );
             }
-        }
-        else {
+        } else {
             $this->addFlash(
                 'success',
                 'Vous n\'avez pas accès à cette page!'
@@ -236,13 +197,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user verify email
-     * 
-     * @param $token
-     * @param ManagerRegistry $doctrine
-     * @return Response
-     */
     #[route('/verification-email/{token}', name: 'app_verify_email')]
     public function verifyUserEmail($token, ManagerRegistry $doctrine): Response
     {
@@ -259,17 +213,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('login');
     }
 
-    /**
-     * Function for user show profile
-     * 
-     * @param User $user
-     * @param ManagerRegistry $doctrine
-     * @param FriendRepository $friendRepository
-     * @param MessageRepository $messageRepository
-     * @param ImageRepository $imageRepository
-     * @param VideoRepository $videoRepository
-     * @return Response
-     */
     #[route('/user/profile/{id}', name: 'profile')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function show(User $user, ManagerRegistry $doctrine, FriendRepository $friendRepository, MessageRepository $messageRepository, ImageRepository $imageRepository, VideoRepository $videoRepository): Response
@@ -299,12 +242,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user edit
-     * 
-     * @param User $user
-     * @return Response
-     */
     #[route('/user/edit/{id}', name: 'user_edit')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function edit(User $user): Response
@@ -323,14 +260,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user delete
-     * 
-     * @param Request $request
-     * @param User $user
-     * @param EntityManager $entityManager
-     * @return Response
-     */
     #[route('/user/delete/{id}', name: 'user_delete')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function delete(Request $request, User $user, EntityManager $entityManager): Response
@@ -343,12 +272,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('login', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * Function for user demande admin
-     * 
-     * @param User $user
-     * @return Response
-     */
     #[route('/user/demande/{id}', name: 'user_demande')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function demandAdmin(User $user): Response
@@ -366,13 +289,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for user accept
-     * 
-     * @param Request $request
-     * @param User $user
-     * @return Response
-     */
     #[route('/user/accept/{id}', name: 'user_accept')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function accept(Request $request, User $user): Response
@@ -383,14 +299,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * Function for admin delete user
-     * 
-     * @param Request $request
-     * @param User $user
-     * @param EntityManager $entityManager
-     * @return Response
-     */
     #[route('/user/admin/delete/{id}', name: 'admin_delete')]
     #[IsGranted('ROLE_ADMIN', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function deleteUser(Request $request, User $user, EntityManager $entityManager): Response
@@ -402,12 +310,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * Function for user edit password
-     * 
-     * @param User $user
-     * @return Response
-     */
     #[route('/modification-password/{prenom}-{nom}', name: 'modification_password')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas acces a cette page!')]
     public function modifPassword(User $user): Response
@@ -431,11 +333,6 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for generate token for send in email
-     *
-     * @return string
-     */
     private function generateToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');

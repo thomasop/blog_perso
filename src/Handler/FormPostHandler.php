@@ -8,32 +8,21 @@ use App\Tool\VideoFactory;
 use App\Tool\EntityManager;
 use App\Tool\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class FormPostHandler
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FileUploader
-     */
+    /** @var FileUploader */
     private $fileUploader;
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var EntityManagerInterface */
     private $entityManagerInterface;
 
     public function __construct(EntityManager $entityManager, RequestStack $request, TokenStorageInterface $tokenStorage, FileUploader $fileUploader, EntityManagerInterface $entityManagerInterface)
@@ -45,13 +34,6 @@ class FormPostHandler
         $this->entityManagerInterface = $entityManagerInterface;
     }
 
-    /**
-     * Function for add new post
-     *
-     * @param Post $post
-     * @param FormInterface $form
-     * @return boolean
-     */
     public function index(Post $post, FormInterface $form): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -60,7 +42,7 @@ class FormPostHandler
             $picture = $form->get('images')->getData();
             foreach ($picture as $image) {
                 $newImages = $this->fileUploader->upload($image);
-                        
+
                 $img = new Image();
                 $img->setName($newImages);
                 $img->setUser($this->tokenStorage->getToken()->getUser());
@@ -77,12 +59,6 @@ class FormPostHandler
         return false;
     }
 
-    /**
-     * Function for edit post
-     *
-     * @param FormInterface $form
-     * @return boolean
-     */
     public function edit(FormInterface $form): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -93,12 +69,6 @@ class FormPostHandler
         return false;
     }
 
-    /**
-     * Function for delete post
-     *
-     * @param Post $post
-     * @return void
-     */
     public function delete(Post $post): void
     {
         $this->entityManager->remove($post);

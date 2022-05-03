@@ -14,11 +14,11 @@ class AppFixtures extends Fixture
 {
     private $passwordHasher;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher) 
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->passwordHasher = $passwordHasher;
     }
-    
+
     public function load(ObjectManager $manager): void
     {
         $admin = new User();

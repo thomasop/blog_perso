@@ -5,10 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\Image;
 use App\Form\ImageType;
-use App\Tool\DeleteFile;
-use App\Tool\FileUploader;
 use App\Handler\FormImageHandler;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,28 +16,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class ImageController extends AbstractController
 {
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var FormImageHandler
-     */
+    /** @var FormImageHandler*/
     private $formImageHandler;
-    
+
     public function __construct(TokenStorageInterface $tokenStorage, FormImageHandler $formImageHandler)
     {
         $this->tokenStorage = $tokenStorage;
         $this->formImageHandler = $formImageHandler;
     }
 
-    /**
-     * Function for delete image
-     *
-     * @param Image $image
-     * @param Request $request
-     * @return Response
-     */
     #[route('/suppression_image/{id}', name: 'delete_image', requirements: ["id" => "\d+"])]
     #[ParamConverter('image', class: 'App\Entity\Image', options: ['mapping' => ['id' => 'id']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
@@ -51,19 +37,17 @@ class ImageController extends AbstractController
             $this->formImageHandler->delete($image);
             if ($request->headers->get('referer') == 'http://127.0.0.1:8000/user/profile/' . $image->getUser()->getId()) {
                 $this->addFlash(
-                'success',
-                'Image supprimé!'
+                    'success',
+                    'Image supprimé!'
                 );
                 return $this->redirectToRoute('profile', ['id' => $image->getUser()->getId()]);
-            }
-            elseif ($request->headers->get('referer') == 'http://127.0.0.1:8000/commentaires/affichages/' . $image->getPost()->getSlug() . '/1'){
+            } elseif ($request->headers->get('referer') == 'http://127.0.0.1:8000/commentaires/affichages/' . $image->getPost()->getSlug() . '/1') {
                 $this->addFlash(
-                'success',
-                'Image supprimé!'
+                    'success',
+                    'Image supprimé!'
                 );
                 return $this->redirectToRoute('comment', ['slug' => $image->getPost()->getSlug(), 'page' => 1]);
             }
-            
         }
         $this->addFlash(
             'success',
@@ -72,11 +56,6 @@ class ImageController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * Function for add image
-     *
-     * @return Response
-     */
     #[route('/image/ajouter', name: 'add_image')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
     public function add(): Response
@@ -95,12 +74,6 @@ class ImageController extends AbstractController
         ]);
     }
 
-    /**
-     * Function for add image in post
-     *
-     * @param Post $post
-     * @return Response
-     */
     #[route('/image/ajouter/{slug}', name: 'add_image_post')]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
     public function addPost(Post $post): Response

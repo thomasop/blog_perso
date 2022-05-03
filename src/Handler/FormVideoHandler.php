@@ -12,18 +12,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class FormVideoHandler
 {
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var TokenStorageInterface
-     */
-    private$tokenStorage;
+    /** @var TokenStorageInterface */
+    private $tokenStorage;
 
     public function __construct(EntityManager $entityManager, RequestStack $request, TokenStorageInterface $tokenStorage)
     {
@@ -32,13 +26,6 @@ class FormVideoHandler
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * Function for add new video
-     *
-     * @param FormInterface $form
-     * @param Video $video
-     * @return boolean
-     */
     public function add(FormInterface $form, Video $video): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -52,14 +39,6 @@ class FormVideoHandler
         return false;
     }
 
-    /**
-     * Function for add new video in post
-     *
-     * @param FormInterface $form
-     * @param Video $video
-     * @param Post $post
-     * @return boolean
-     */
     public function addPost(FormInterface $form, Video $video, Post $post): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());

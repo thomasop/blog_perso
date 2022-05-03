@@ -10,35 +10,21 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class FormUserHandler
 {
-    /**
-     * @var FileUploader
-     */
+    /** @var FileUploader */
     private $fileUploader;
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var UserPasswordHasherInterface
-     */
+    /** @var UserPasswordHasherInterface */
     private $passwordEncoder;
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
-    /**
-     * @var MailerInterface
-     */
+    /** @var MailerInterface */
     private $mailer;
-    /**
-     * @var UserRepository
-     */
+    /** @var UserRepository */
     private $userRepository;
 
     public function __construct(UserPasswordHasherInterface $passwordEncoder, RequestStack $request, FileUploader $fileUploader, EntityManager $entityManager, MailerInterface $mailer, UserRepository $userRepository)
@@ -51,13 +37,6 @@ class FormUserHandler
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * Function for add new user
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function new(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -91,7 +70,7 @@ class FormUserHandler
                 ->from('thomasdasilva010@gmail.com')
                 ->to(htmlspecialchars($form->get('email')->getData()))
                 ->subject('vérification email')
-                
+
                 ->htmlTemplate('user/confirmationEmail.html.twig')
                 ->context([
                     'token' => $user->getToken(),
@@ -104,13 +83,6 @@ class FormUserHandler
         return false;
     }
 
-    /**
-     * Function for user forgot password
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function forgotPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -125,7 +97,7 @@ class FormUserHandler
                     ->from('thomasdasilva010@gmail.com')
                     ->to(htmlspecialchars($form->get('email')->getData()))
                     ->subject('Mot de passe oublié')
-                    
+
                     ->htmlTemplate('user/forgotpassword.html.twig')
                     ->context([
                         'token' => $user->getToken(),
@@ -140,19 +112,12 @@ class FormUserHandler
         return false;
     }
 
-    /**
-     * Function for user reset password
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function resetPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setToken(null);
-            if (preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#', $form->get('password')->getData())){
+            if (preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#', $form->get('password')->getData())) {
                 $user->setPassword(
                     $this->passwordEncoder->hashPassword(
                         $user,
@@ -161,20 +126,13 @@ class FormUserHandler
                 );
                 $this->entityManager->Add($user);
                 return true;
-            }
-            elseif (!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#', $form->get('password')->getData())){
+            } elseif (!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{8,}$#', $form->get('password')->getData())) {
                 return 'erreur';
             }
         }
         return false;
     }
 
-    /**
-     * Function for user verify email
-     *
-     * @param User $userRepository
-     * @return void
-     */
     public function verifyUserEmail(User $userRepository): void
     {
         $userRepository->setEnabled(true);
@@ -182,13 +140,6 @@ class FormUserHandler
         $this->entityManager->Add($userRepository);
     }
 
-    /**
-     * Function for user edit
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function edit(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -203,13 +154,6 @@ class FormUserHandler
         return false;
     }
 
-    /**
-     * Function for user damande for admin
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function demandeAdmin(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -217,8 +161,7 @@ class FormUserHandler
             if ($form->get('message')->getData()) {
                 $message = $form->get('message')->getData();
                 $user->setMessage($message);
-            }
-            else {
+            } else {
                 $message = 'Salut, je peux etre admin?';
                 $user->setMessage($message);
             }
@@ -229,12 +172,6 @@ class FormUserHandler
         return false;
     }
 
-    /**
-     * Function for admin accept user
-     *
-     * @param UserEntity $user
-     * @return void
-     */
     public function accept($user): void
     {
         $user->setRoles(["ROLE_ADMIN"]);
@@ -244,13 +181,6 @@ class FormUserHandler
         $this->entityManager->Add($user);
     }
 
-    /**
-     * Function for user edit password
-     *
-     * @param FormInterface $form
-     * @param User $user
-     * @return boolean
-     */
     public function modifPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -265,7 +195,7 @@ class FormUserHandler
                     ->from('thomasdasilva010@gmail.com')
                     ->to(htmlspecialchars($form->get('email')->getData()))
                     ->subject('Modifier son mot de passe')
-                    
+
                     ->htmlTemplate('user/modifpassword.html.twig')
                     ->context([
                         'token' => $user->getToken(),
@@ -280,11 +210,6 @@ class FormUserHandler
         return false;
     }
 
-    /**
-     * Function for generate token for send in email
-     *
-     * @return string
-     */
     private function generateToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');

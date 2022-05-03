@@ -47,13 +47,15 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
-    public function allHasard() {
+    public function allHasard()
+    {
         $query = $this->createQueryBuilder('p');
         $query->orderBy('RAND()');
         return $query->getQuery()->getResult();
     }
 
-    public function hasard() {
+    public function hasard()
+    {
         $query = $this->createQueryBuilder('p');
         $query->orderBy('RAND()');
         $query->setMaxResults(1);

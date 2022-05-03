@@ -13,17 +13,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class FormFriendHandler
 {
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $request;
-    /**
-     * @var TokenStorageInterface
-     */
+    /** @var TokenStorageInterface */
     private $tokenStorage;
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     private $entityManager;
 
     public function __construct(RequestStack $request, TokenStorageInterface $tokenStorage, EntityManager $entityManager)
@@ -33,15 +27,6 @@ class FormFriendHandler
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * Function for add friend
-     *
-     * @param FormInterface $form
-     * @param Friend $friend
-     * @param User $user
-     * @param Message $message
-     * @return boolean
-     */
     public function add(FormInterface $form, Friend $friend, User $user, Message $message): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
@@ -51,8 +36,7 @@ class FormFriendHandler
             if ($form->get('message')->getData() == null) {
                 $texte = 'Salut, tu veux etre mon ami?';
                 $message->setContent($texte);
-            }
-            else {
+            } else {
                 $message->setContent($form->get('message')->getData());
             }
             $message->setSend($this->tokenStorage->getToken()->getUser());
@@ -63,12 +47,6 @@ class FormFriendHandler
         return false;
     }
 
-    /**
-     * Function for accept friend
-     *
-     * @param Friend $friend
-     * @return void
-     */
     public function accept(Friend $friend): void
     {
         $friend->setStatut(1);
