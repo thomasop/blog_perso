@@ -3,10 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Message;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\Parameter;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Message>
@@ -47,6 +49,58 @@ class MessageRepository extends ServiceEntityRepository
         }
     }
 
+    public function allMessage($currentId, $user) {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select('m')
+        ->where($qb->expr()->andX(
+            $qb->expr()->eq('m.send', ':currentId'),
+            $qb->expr()->eq('m.receive', ':user')
+        ))
+        ->orWhere($qb->expr()->andX(
+            $qb->expr()->eq('m.receive', ':currentId'),
+            $qb->expr()->eq('m.send', ':user')
+        ))
+        ->setParameters(new ArrayCollection([
+            new Parameter('currentId', $currentId),
+            new Parameter('user', $user)
+        ]));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function lastMessage($currentId, $user) {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select('m')
+        ->where($qb->expr()->andX(
+            $qb->expr()->eq('m.send', ':currentId'),
+            $qb->expr()->eq('m.receive', ':user')
+        ))
+        ->orWhere($qb->expr()->andX(
+            $qb->expr()->eq('m.receive', ':currentId'),
+            $qb->expr()->eq('m.send', ':user')
+        ))
+        ->setParameters(new ArrayCollection([
+            new Parameter('currentId', $currentId),
+            new Parameter('user', $user)
+        ]))
+        ->orderBy('m.id', 'DESC')
+        ->setMaxResults(1);
+        return $qb->getQuery()->getResult();
+    }
+
+    public function allConv($currentId) {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select('m')
+        ->where($qb->expr()->andX(
+            $qb->expr()->eq('m.receive', ':currentId')
+        ))
+        ->orWhere($qb->expr()->andX(
+            $qb->expr()->eq('m.send', ':currentId')
+        ))
+        ->setParameters(new ArrayCollection([
+            new Parameter('currentId', $currentId)
+        ]));
+        return $qb->getQuery()->getResult();
+    }
     // /**
     //  * @return Message[] Returns an array of Message objects
     //  */

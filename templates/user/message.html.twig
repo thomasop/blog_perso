@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande d'admin{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+    <div class="container">
+        <h1 class="mt-5 mb-5 text-center">Demande d'admin</h1>
+        <p>Le message est facultatif.</p>
+        {{ form_start(form) }}
+            <section class="text-danger">{{ form_errors(form) }}</section>
+            <section class="form-group">
+                <div class="text-danger">{{ form_errors(form.message) }}</div>
+                {{ form_label(form.message) }}
+                <div>{{ form_widget(form.message, { 'attr': {'class': 'form-control'} }) }}</div>
+                <small class="form-text text-muted">{{ form_help(form.message) }}</small>
+            </section>
+            <button class="btn btn-primary mt-3">{{ button_label|default('Envoyer') }}</button>
+        {{ form_end(form) }}
+    </div>    
+{% include 'footer.html.twig' %}
+{% endblock %}

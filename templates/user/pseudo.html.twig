@@ -1,0 +1,31 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du pseudo{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+    <main>
+        <article class="mx-5">
+            <h3 class="mb-5 mt-5 text-center margin-user text-shadow-drop-right">Modifiez son pseudo ici !</h3>
+            {{ form_start(form) }}
+                <section class="text-danger">{{ form_errors(form) }}</section>
+                <section class="form-group">
+                    <div class="text-danger">{{ form_errors(form.prenom) }}</div>
+                    {{ form_label(form.prenom) }}
+                    <div>{{ form_widget(form.prenom, { 'attr': {'class': 'form-control'} }) }}</div>
+                    <small class="form-text text-muted">{{ form_help(form.prenom) }}</small>
+                </section>
+                <section class="form-group">
+                    <div class="text-danger">{{ form_errors(form.nom) }}</div>
+                    {{ form_label(form.nom) }}
+                    <div>{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}</div>
+                    <small class="form-text text-muted">{{ form_help(form.nom) }}</small>
+                </section> 
+                <button class="btn btn-outline-primary mt-3" type="submit">Modifier</button>
+            {{ form_end(form) }}
+        </article>
+    </main>
+    {% include 'footer.html.twig' %}
+{% endblock %}

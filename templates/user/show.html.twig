@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-9 margin-auto">
+                <div class="d-flex justify-content-around mt-5 mb-5">
+                    <h1 class="text-center">{{ user.prenom|capitalize }} {{ user.nom|capitalize }}</h1></br>
+                    <img src="/uploads/avatar/{{ user.avatar }}" alt="Logo" width="80" height="80">
+                </div>
+                <div>
+                    <h2>Information personnelle</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item">Age : {{ age }}</li>
+                        {% if user.sexe == false %}
+                            <li class="list-group-item">Sexe : Homme</li>
+                        {% elseif user.sexe == true %}
+                            <li class="list-group-item">Sexe : Femme</li>
+                        {% else %}
+                            <li class="list-group-item">Sexe : pas renseigné</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div>
+                    <div class="d-flex mt-5 mb-3">
+                        <h2>Photos</h2>
+                        <a href="" class="btn btn-primary margin">Ajouter</a>
+                    </div>
+                    <div class="d-flex flex-wrap">
+                        {% for i in image %}
+                            <div class="border border-dark image">
+                                <div class="d-flex flex-column">
+                                    <button class="photo"><img src="/uploads/avatar/{{ i.name }}" alt="Slide" width="250" height="167"></button>
+                                    {% if app.user %}
+                                        {% if app.user == i.user %}
+                                            <a class="text-decoration-none text-center" href="">Supprimer l'image</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mb-5 mt-5">
+                        <a href="#" id="loadMediaimage" class="btn btn-primary">Plus d'images</a>
+                        <a href="#" id="hideMediaimage" class="btn btn-primary">Moins d'images</a>
+                    </div>
+                    <div class="d-flex mt-5 mb-3">
+                        <h2>Videos</h2>
+                        <a href="" class="btn btn-primary margin">Ajouter</a>
+                    </div>    
+                    <div class="d-flex flex-wrap">
+                        {% for v in video %}
+                            <div class="border border-dark video">
+                                <div class="d-flex flex-column">
+                                    <iframe allowfullscreen width="250" height="167"
+                                        src="{{ v.url}}">
+                                    </iframe>
+                                    {% if app.user %}
+                                        {% if app.user == v.user %}
+                                            <a class="text-decoration-none text-center" href="">Supprimer la video</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mb-5 mt-5">
+                        <a href="#" id="loadMediavideo" class="btn btn-primary">Plus de videos</a>
+                        <a href="#" id="hideMediavideo" class="btn btn-primary">Moins de videos</a>
+                    </div>
+                </div>
+                <div class="mb-5 mt-5">
+                    <div class="d-flex justify-content-around">
+                        <button id="myInput" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Posts
+                        </button>
+                        {% if app.user %}
+                        {% if app.user == user %}
+                            <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#test2" role="button" aria-controls="offcanvasExample">Invitations</button>
+                        {% else %}
+                            {% if friend is not empty %}
+                                {% for f in friend %}
+                                    {% if f.statut == false %}
+                                        <p>Demande envoyé en attente d'une reponse</p>
+                                    {% elseif f.statut == true %}
+                                        <div class="d-flex justify-content-around">
+                                            <p class="mt-auto mb-auto d-flex">Vous etes amis avec {{ user.prenom|capitalize }} {{ user.nom|capitalize }} : </p>
+                                            <a class="btn btn-primary mt-auto mb-auto d-flex" href="{{ path('message', {'prenom': user.prenom, 'nom': user.nom}) }}">ecrire un message</a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <a class="btn btn-primary" href="{{ path('friend', {'prenom': user.prenom, 'nom': user.nom}) }}">Ajouter {{ user.prenom|capitalize }} {{ user.nom|capitalize }} en ami pour lui écrire</a>
+                            {% endif %}
+                        {% endif %}
+                        {% else %}
+                            <a class="btn btn-primary" href="{{ path('login') }}">Connecter vous pour envoyer un message</a>
+                        {% endif %}
+                    </div>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Posts</h5>
+                                    <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>                             
+                                    <div class="modal-body">
+                                        {% if posts|length > 0 %}
+                                            {% for post in posts %}
+                                                <div class="comment mt-4 text-justify float-left"> <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
+                                                    <a href="">{{ post.title }}</a><br>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                        <p class="pt-3 pb-3 ps-3">aucun post</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button id="closeFooter" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% set utilisateur = ["ROLE_USER"] %}
+                {% set admin = ["ROLE_ADMIN", "ROLE_USER"] %}
+                {% set admine = ["ROLE_USER", "ROLE_ADMIN"] %}
+                {% if app.user %}
+                    {% if app.user == user %}
+                        <div class="d-flex flex-wrap justify-content-around mt-5 mb-5">
+                            <a class="btn btn-primary" href="{{ path('modification_password', {'prenom': user.prenom, 'nom': user.nom}) }}">Modification du Mot de passe</a>
+                            <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">Modification du profile</a>
+                            {% if user.roles == utilisateur %}
+                                {% if (user.admin == false) and (user.demandeAdmin == false) %}
+                                    <a class="btn btn-primary" href="{{ path('user_demande', {'id': user.id}) }}">Devenir admin</a>
+                                {% elseif (user.admin == false) and (user.demandeAdmin == true) %}
+                                    <a class="btn btn-primary" href="{{ path('profile', {'id': user.id}) }}">Vous avez demandé a etre admin, en attente d'une réponse.</a>
+                                {% endif %}
+                            {% endif %}
+                            {% if user.roles == admin or  user.roles == admine %}
+                                    <a class="btn btn-primary" href="{{ path('user_index') }}">Page admin</a>
+                            {% endif %}
+                            {{ include('user/_delete_form.html.twig') }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="col-2 border rounded bg-primary border-primary ml-5 p-2 position-fixed end-0 height-friend mt-3 overflow-auto">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Vos amis</li>
+                    {% if prenom == null %}
+                        <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+                    {% else %}
+                        {% for p in prenom %}
+                            {% set pseudo = [app.user.prenom, app.user.nom]%}
+                            {% set split = p|split(' ') %}
+                            {% if pseudo == split %}
+
+                            {% else %}
+                                <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}#last">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% include 'footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Inscription</h1>
+
+    {{ include('user/_form.html.twig') }}
+
+    <a class="btn btn-primary mt-3" href="{{ path('login') }}">Retour à la page de connexion</a>
+</div>
+{% include 'footer.html.twig' %}
+{% endblock %}
