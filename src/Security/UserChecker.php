@@ -16,7 +16,7 @@ class UserChecker implements UserCheckerInterface
      * @param UserInterface $user
      * @return void
      */
-    public function checkPreAuth(UserInterface $user)
+    public function checkPreAuth(UserInterface $user): void
     {
         if (!$user instanceof AppUser) {
             return;
@@ -34,7 +34,7 @@ class UserChecker implements UserCheckerInterface
      * @param UserInterface $user
      * @return void
      */
-    public function checkPostAuth(UserInterface $user)
+    public function checkPostAuth(UserInterface $user): void
     {
         if (!$user instanceof AppUser) {
             return;
