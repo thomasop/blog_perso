@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout de video{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+<div class="container">
+    <div class="row">
+        <h1 class="text-center mt-5 mb-5">Ajouter une video</h1>
+        {{ form_start(form) }}
+            <section class="text-danger">{{ form_errors(form) }}</section>
+            <section class="form-group">
+                <div class="text-danger">{{ form_errors(form.url) }}</div>
+                <p>Video : </p>
+                <div>{{ form_widget(form.url) }}</div>
+                <small class="form-text text-muted">{{ form_help(form.url) }}</small>
+            </section>        
+            <button class="btn btn-outline-lg btn-primary mt-3" type="submit">Ajoutez</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+    
+{% include 'footer.html.twig' %}
+{% endblock %}
