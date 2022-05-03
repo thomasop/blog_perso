@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-10 pb-4">
+                <h1 class="mt-5 mb-4">Conversation entre vous et {{ user.prenom|capitalize }} {{ user.nom|capitalize }}</h1>
+                <div class="d-flex justify-content-between">
+                    {% for f1 in final1 %}
+                        {% if f1 == app.user.prenom %}
+                            <div class="p-2">Vous</div>
+                        {% endif %}
+                    {% endfor %}
+                    {% for f2 in final2 %}
+                        <div class="p-2">{{ f2 }}</div>
+                    {% endfor %}
+                </div>
+                <div class="d-flex flex-column overflow-auto" style="height: 250px;">
+                    {% for a in all %}
+                        {% if a.send == app.user %}
+                        <div class="mb-2 bg-light text-dark mt-2">
+                            {% for l in last %}
+                                {% if l.id == a.id %}
+                                    <div id="last"></div>
+                                {% endif %}
+                            {% endfor %}
+                            <p><strong>{{ a.content }}</strong></p>
+                            <p>{{ a.createdAt|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY 'à' HH'h' mm'min'",timezone="Europe/Paris") }}</p>
+                        </div>
+                            
+                        {% else %}
+                        <div class="mb-2 bg-light text-dark mt-2 ml-auto d-flex flex-column align-items-end">
+                            {% for l in last %}
+                                {% if l.id == a.id %}
+                                    <div id="last"></div>
+                                {% endif %}
+                            {% endfor %}
+                            <p><strong>{{ a.content }}</strong></p>
+                            <p>{{ a.createdAt|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY 'à' HH'h' mm'min'",timezone="Europe/Paris") }}</p>
+                        </div>
+                            
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% if app.user %}
+                    {% if is_granted('ROLE_USER') %}
+                        {{ form_start(form) }}
+                            <section class="text-danger">{{ form_errors(form) }}</section>
+                            <section class="form-group">
+                                <div class="text-danger">{{ form_errors(form.content) }}</div>
+                                {{ form_label(form.content) }}
+                                <div>{{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}</div>
+                                <small class="form-text text-muted">{{ form_help(form.content) }}</small>
+                            </section>
+                            <button name="message_add" class="btn btn-primary mt-3">{{ button_label|default('Envoyer') }}</button>
+                        {{ form_end(form) }}
+                    {% endif %}
+                {% else %}
+                    <a href="{{ path('login') }}">Connecter vous pour envoyer un message</a>
+                {% endif %}
+            </div>
+            <div class="col-2 border rounded bg-primary border-primary ml-5 p-2 position-fixed end-0 height-friend mt-3 overflow-auto">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Vos amis</li>
+                    {% if prenom == null %}
+                        <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+                    {% else %}
+                        {% for p in prenom %}
+                            {% set pseudo = [app.user.prenom, app.user.nom]%}
+                            {% set split = p|split(' ') %}
+                            {% if pseudo == split %}
+    
+                            {% else %}
+                                <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}#last">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            {% if app.user %}
+                {% if app.user == user %}
+                    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
+                    {{ include('user/_delete_form.html.twig') }}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% include 'footer.html.twig' %}
+{% endblock %}
