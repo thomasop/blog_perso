@@ -6,12 +6,9 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
+import * as bootstrap from 'bootstrap';
+// any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
-
-import { Tooltip, Toast, Popover } from 'bootstrap';
-// start the Stimulus application
-import './bootstrap';
-
 import { startStimulusApp } from '@symfony/stimulus-bridge';
 
 export const app = startStimulusApp(require.context(
@@ -19,4 +16,9 @@ export const app = startStimulusApp(require.context(
     true,
     /\.(j|t)sx?$/
 ));
-import * as bootstrap from 'bootstrap';
+
+import logoPath from './images/flore.png';
+
+import { Tooltip, Toast, Popover } from 'bootstrap';
+// start the Stimulus application
+import './bootstrap';
