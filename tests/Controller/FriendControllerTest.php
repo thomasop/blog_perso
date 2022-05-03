@@ -9,9 +9,17 @@ use App\Repository\UserRepository;
 
 class FriendControllerTest extends WebTestCase
 {
+    /**
+     * @var null
+     */
     private $client = null;
   
-    public function testAdd()
+    /**
+     * Function for test /ami/user0-brumen0 route
+     *
+     * @return void
+     */
+    public function testAdd(): void
     {
         $this->client = static::createClient();
         
@@ -26,7 +34,12 @@ class FriendControllerTest extends WebTestCase
         );
     }
 
-    public function testAddForm()
+    /**
+     * Function for test /ami/user0-brumen0 route form
+     *
+     * @return void
+     */
+    public function testAddForm(): void
     {
         $this->client = static::createClient();
         
@@ -45,7 +58,12 @@ class FriendControllerTest extends WebTestCase
             );
     }
 
-    public function testShows()
+    /**
+     * Function for test /amis/afichages route
+     *
+     * @return void
+     */
+    public function testShows(): void
     {
         $this->client = static::createClient();
         
