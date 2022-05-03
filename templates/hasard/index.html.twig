@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Post aléatoire!{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="mt-5 mb-5 text-center">Post Aléatoire</h1>
+            <div class="d-flex justify-content-around mt-5">
+                <a class="p-2 btn btn-primary" href="{{ path('home') }}">Retour a la page d'accueil</a>
+                <a class="p-2 btn btn-primary" href="{{ path('hasard') }}">hasard</a>
+            </div>
+                
+            <div class="p-3 mb-2 bg-light text-dark mt-5">
+                <div class="d-flex">
+                    <img src="/uploads/avatar/{{ post.user.avatar }}" alt="avatar" width="80" height="80">
+                    <a class="mt-auto mb-auto margin text-decoration-none" href="{{ path('profile', {'id': post.user.id}) }}">{{ post.user.prenom|capitalize }} {{ post.user.nom|capitalize }}</a>
+                </div>
+                <div class="d-flex flex-column">
+                    <p class="p-2">{{ post.title }}</p>
+                    <p class="p-2">{{ post.content }}</p>
+                    <a class="btn btn-primary p-2" href="{{ path('comment', {slug: post.slug, page: '1'}) }}">Commentaires</a>
+                </div>
+                <div>
+                    {% if app.user %}
+                        {% if app.user.id == post.user.id %}
+                            <div class="d-flex justify-content-around mt-3">
+                                <a class="btn btn-primary" href="{{ path('post_edit', {'slug': post.slug}) }}">Modifier</a>
+                                {{ include('post/_delete_form.html.twig') }}
+                            </div>    
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-2 border rounded bg-primary border-primary ml-5 p-2 position-fixed end-0 height-friend mt-3 overflow-auto">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Vos amis</li>
+                {% if prenom == null %}
+                    <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+                {% else %}
+                    {% for p in prenom %}
+                        {% set pseudo = [app.user.prenom, app.user.nom]%}
+                        {% set split = p|split(' ') %}
+                        {% if pseudo == split %}
+
+                        {% else %}
+                            <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}#last">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+    
+{% include 'footer.html.twig' %}
+{% endblock %}
