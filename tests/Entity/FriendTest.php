@@ -9,7 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class FriendTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test Friend Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$friend = (new Friend())
 		->setStatut(false);
@@ -18,6 +23,11 @@ final class FriendTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test statut in Friend Entity
+     *
+     * @return void
+     */
     public function testStatut(): void
     {
         $friend = new Friend();

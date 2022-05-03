@@ -56,9 +56,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function new(FormInterface $form, User $user)
+    public function new(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -109,9 +109,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function forgotPassword(FormInterface $form, User $user)
+    public function forgotPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -145,9 +145,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function resetPassword(FormInterface $form, User $user)
+    public function resetPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -175,7 +175,7 @@ class FormUserHandler
      * @param User $userRepository
      * @return void
      */
-    public function verifyUserEmail(User $userRepository)
+    public function verifyUserEmail(User $userRepository): void
     {
         $userRepository->setEnabled(true);
         $userRepository->setToken(null);
@@ -187,9 +187,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function edit(FormInterface $form, User $user)
+    public function edit(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -208,9 +208,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function demandeAdmin(FormInterface $form, User $user)
+    public function demandeAdmin(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -232,10 +232,10 @@ class FormUserHandler
     /**
      * Function for admin accept user
      *
-     * @param [type] $user
+     * @param UserEntity $user
      * @return void
      */
-    public function accept($user)
+    public function accept($user): void
     {
         $user->setRoles(["ROLE_ADMIN"]);
         $user->setAdmin(true);
@@ -249,9 +249,9 @@ class FormUserHandler
      *
      * @param FormInterface $form
      * @param User $user
-     * @return void
+     * @return boolean
      */
-    public function modifPassword(FormInterface $form, User $user)
+    public function modifPassword(FormInterface $form, User $user): bool
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -283,9 +283,9 @@ class FormUserHandler
     /**
      * Function for generate token for send in email
      *
-     * @return void
+     * @return string
      */
-    private function generateToken()
+    private function generateToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }

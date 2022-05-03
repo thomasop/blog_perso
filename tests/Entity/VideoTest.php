@@ -11,7 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class VideoTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test Video Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$video = (new Video())
 		->setUrl("https://www.youtube.com/watch?v=v-OGCaUm9R0");
@@ -20,6 +25,11 @@ final class VideoTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test name in Video Entity
+     *
+     * @return void
+     */
     public function testName(): void
     {
         $video = new Video();

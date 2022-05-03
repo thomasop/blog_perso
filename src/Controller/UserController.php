@@ -436,7 +436,7 @@ class UserController extends AbstractController
      *
      * @return string
      */
-    private function generateToken()
+    private function generateToken(): string
     {
         return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
     }

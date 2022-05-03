@@ -10,9 +10,17 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserControllerTest extends WebTestCase
 {
+    /**
+     * @var null
+     */
     private $client = null;
 
-    public function testRegister()
+    /**
+     * Function for test /register route
+     *
+     * @return void
+     */
+    public function testRegister(): void
     {
         $this->client = static::createClient();
         $this->client->request('GET', '/register');
@@ -22,7 +30,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testRegisterForm()
+    /**
+     * Function for test /register route form
+     *
+     * @return void
+     */
+    public function testRegisterForm(): void
     {
         $this->client = static::createClient();
         $this->client->request('GET', '/register');
@@ -42,7 +55,12 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorExists('.alert.alert-success');
     }
 
-    public function testForgotPassword()
+    /**
+     * Function for test /forgot-password route
+     *
+     * @return void
+     */
+    public function testForgotPassword(): void
     {
         $this->client = static::createClient();
         $this->client->request('GET', '/forgot-password');
@@ -52,7 +70,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testShow()
+    /**
+     * Function for test /user/profile/1 route
+     *
+     * @return void
+     */
+    public function testShow(): void
     {
         $this->client = static::createClient();
         
@@ -67,7 +90,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testEdit()
+    /**
+     * Function for test /user/edit/1 route
+     *
+     * @return void
+     */
+    public function testEdit(): void
     {
         $this->client = static::createClient();
         
@@ -82,7 +110,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testDelete()
+    /**
+     * Function for test /user/delete/1 route
+     *
+     * @return void
+     */
+    public function testDelete(): void
     {
         $this->client = static::createClient();
         
@@ -97,7 +130,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testDemandAdmin()
+    /**
+     * Function for test /user/demande/1 route
+     *
+     * @return void
+     */
+    public function testDemandAdmin(): void
     {
         $this->client = static::createClient();
         
@@ -112,7 +150,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testAccept()
+    /**
+     * Function for test /user/accept/1 route
+     *
+     * @return void
+     */
+    public function testAccept(): void
     {
         $this->client = static::createClient();
         
@@ -127,7 +170,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testDeleteUser()
+    /**
+     * Function for test /user/admin/delete/1 route
+     *
+     * @return void
+     */
+    public function testDeleteUser(): void
     {
 
         $this->client = static::createClient();
@@ -143,8 +191,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-
-    public function testModifPassword()
+    /**
+     * Function for test /modification-password/user0-brumen0 route
+     *
+     * @return void
+     */
+    public function testModifPassword(): void
     {
         $this->client = static::createClient();
         

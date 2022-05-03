@@ -9,7 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class CommentTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test Comment Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$comment = (new Comment())
         ->setContent("prenom");
@@ -18,6 +23,11 @@ final class CommentTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test content in Comment Entity
+     *
+     * @return void
+     */
     public function testContent(): void
     {
         $comment = new Comment();

@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="text-center mt-5 mb-4">Accueil</h1>
+            <button id="myInput" type="button" class="btn btn-primary mt-5 mb-5" data-toggle="modal" data-target="#exampleModal">
+                Créer un nouveau post
+            </button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Créer un post</h5>
+                            <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form_start(form) }}
+                                    <section class="text-danger">{{ form_errors(form) }}</section>
+                                    <section class="form-group">
+                                        <div class="text-danger">{{ form_errors(form.title) }}</div>
+                                        <label>{{ form_label(form.title) }}</label>
+                                        <div>{{ form_widget(form.title, { 'attr': {'class': 'form-control'} }) }}</div>
+                                        <small class="form-text text-muted">{{ form_help(form.title) }}</small>
+                                    </section>
+                                    <section class="form-group">
+                                        <div class="text-danger">{{ form_errors(form.content) }}</div>
+                                        <label>{{ form_label(form.content) }}</label>
+                                        <div>{{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}</div>
+                                        <small class="form-text text-muted">{{ form_help(form.content) }}</small>
+                                    </section>
+                                    <section class="form-group">
+                                        <div class="text-danger">{{ form_errors(form.images) }}</div>
+                                        <label>{{ form_label(form.images) }}</label>
+                                        <div>{{ form_widget(form.images, { 'attr': {'class': 'form-control'} }) }}</div>
+                                        <small class="form-text text-muted">{{ form_help(form.images) }}</small>
+                                    </section>
+                                    <ul class="videos" id="video_list" style="list-style:none;" data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
+                                        Video : 
+                                        {% for row in form.videos %}
+                                            <li>{{ form_widget(form.videos) }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <button class="btn btn-primary mb-5 mt-3">{{ button_label|default('Créer') }}</button>
+                                {{ form_end(form) }}
+                            </div>
+                            <div class="modal-footer">
+                            <button id="closeFooter" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if posts|length > 0 %}
+                {% for post in posts %}
+                <div class="p-3 mb-2 bg-light posts text-dark">
+                    <div class="d-flex mb-3">
+                        <img src="/uploads/avatar/{{ post.user.avatar }}" alt="avatar" width="80" height="80">
+                        <a class="text-decoration-none mt-auto mb-auto ml-5 margin" href="{{ path('profile', {'id': post.user.id}) }}">{{ post.user.prenom|capitalize }} {{ post.user.nom|capitalize }}</a>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <p class="p-2">{{ post.title }}</p>
+                        <p class="p-2">{{ post.content }}</p>
+                        {% if post.images != null %}
+                            <p>ok</p>
+                        {% endif %}
+                        <a class="btn btn-primary" href="">Commentaires</a>
+                    </div>
+                    <div> 
+                        {% if app.user %}
+                            {% if app.user.id == post.user.id %}
+                                <div class="d-flex justify-content-around mt-3">
+                                    <a class="btn btn-primary" href="{{ path('post_edit', {'slug': post.slug}) }}">Modifier</a>
+                                    {{ include('post/_delete_form.html.twig') }}
+                                </div>    
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% if posts|length > 4 %}
+                <article class="text-center ">
+                    <a class="btn btn-outline-primary" href="#" id="loadMorePost">Plus de posts<i class="fas fa-plus-circle fa-3x"></i></a>
+                    <a class="btn btn-outline-primary" href="#" id="loadLessPost">Moins de posts<i class="fas fa-minus-circle fa-3x"></i></a>              
+                </article>
+                {% endif %}
+            {% else %}
+                <div>
+                    <p class="mt-5 mb-5">Aucun post actuellement</p>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-2 border rounded bg-primary border-primary ml-5 p-2 position-fixed end-0 height-friend mt-3 overflow-auto">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Vos amis</li>
+                {% if prenom == null %}
+                    <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+                {% else %}
+                    {% for p in prenom %}
+                        {% set pseudo = [app.user.prenom, app.user.nom]%}
+                        {% set split = p|split(' ') %}
+                        {% if pseudo == split %}
+
+                        {% else %}
+                            <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}#last">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% include 'footer.html.twig' %}
+{% endblock %}
+

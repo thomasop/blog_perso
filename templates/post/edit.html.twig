@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du post{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+    <div class="container">
+        <div class="row">
+            <h1 class="text-center mt-5 mb-5">Modification du post</h1>
+            {{ form_start(form) }}
+                <section class="text-danger">{{ form_errors(form) }}</section>
+                <section class="form-group">
+                    <div class="text-danger">{{ form_errors(form.title) }}</div>
+                    <label class="mb-3">{{ form_label(form.title) }}</label>
+                    <div>{{ form_widget(form.title) }}</div>
+                    <small class="form-text text-muted">{{ form_help(form.title) }}</small>
+                </section>
+                <section class="form-group">
+                    <div class="text-danger">{{ form_errors(form.content) }}</div>
+                    <label class="mb-3">{{ form_label(form.content) }}</label>
+                    <div>{{ form_widget(form.content) }}</div>
+                    <small class="form-text text-muted">{{ form_help(form.content) }}</small>
+                </section>     
+                <button name="edit" class="btn btn-outline-lg btn-primary mt-3" type="submit">Modifier</button>
+            {{ form_end(form) }}
+            <a class="btn btn-primary mt-4 w-25" href="{{ path('home') }}">Retour à l'accueil</a>
+        </div>
+    </div>    
+{% include 'footer.html.twig' %}
+{% endblock %}

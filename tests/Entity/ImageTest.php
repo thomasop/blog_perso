@@ -3,14 +3,16 @@
 namespace App\Tests\Entity;
 
 use App\Entity\Image;
-use App\Entity\Friend;
-use App\Entity\Comment;
-use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class ImageTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test Image Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$image = (new Image())
 		->setName("ajks.jpeg");
@@ -19,6 +21,11 @@ final class ImageTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test name in Image Entity
+     *
+     * @return void
+     */
     public function testName(): void
     {
         $image = new Image();

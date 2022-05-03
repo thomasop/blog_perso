@@ -10,7 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class UserTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test User Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$name = "nom";
 		$user = (new User())
@@ -29,6 +34,11 @@ final class UserTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test nom in User Entity
+     *
+     * @return void
+     */
     public function testNom(): void
     {
         $user = new User();
@@ -36,6 +46,11 @@ final class UserTest extends KernelTestCase
         $this->assertEquals("test nom", $user->getNom());
     }
 
+    /**
+     * Function for test prenom in User Entity
+     *
+     * @return void
+     */
     public function testPrenom(): void
     {
         $user = new User();
@@ -43,6 +58,11 @@ final class UserTest extends KernelTestCase
         $this->assertEquals("test prenom", $user->getPrenom());
     }
 
+    /**
+     * Function for test email in User Entity
+     *
+     * @return void
+     */
     public function testEmail(): void
     {
         $user = new User();
@@ -50,6 +70,11 @@ final class UserTest extends KernelTestCase
         $this->assertEquals("test mail", $user->getEmail());
     }
 
+    /**
+     * Function for test password in User Entity
+     *
+     * @return void
+     */
     public function testPassword(): void
     {
         $user = new User();

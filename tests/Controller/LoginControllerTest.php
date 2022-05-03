@@ -8,7 +8,7 @@ use Symfony\Component\HTTPFoundation\Response;
 class LoginControllerTest extends WebTestCase
 {
     /**
-     * @var [type]
+     * @var null
      */
     private $client = null;
   
@@ -17,7 +17,7 @@ class LoginControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testIndex()
+    public function testIndex(): void
     {
         $this->client = static::createClient();
         $this->client->request('GET', '/');
@@ -32,7 +32,7 @@ class LoginControllerTest extends WebTestCase
      *
      * @return void
      */
-    public function testLogout()
+    public function testLogout(): void
     {
         $this->client = static::createClient();
         $this->client->request('GET', '/logout');

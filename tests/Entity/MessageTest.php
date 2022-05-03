@@ -10,7 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class MessageTest extends KernelTestCase
 {
-    public function test()
+    /**
+     * Function for test Message Entity
+     *
+     * @return void
+     */
+    public function test(): void
 	{
 		$message = (new Message())
 		->setContent("ajks");
@@ -19,6 +24,11 @@ final class MessageTest extends KernelTestCase
 		$this->assertCount(0, $error);
 	}
 
+    /**
+     * Function for test message in Message Entity
+     *
+     * @return void
+     */
     public function testMessage(): void
     {
         $message = new Message();
