@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-9 margin-auto">
+                <div>
+                    <h1 class="font-weight-bold mt-5">{{ post.title }}</h1>
+                    <p class="mt-3 mb-5">{{ post.content }}</p>
+                </div>
+                {% if app.user %}
+                    {% if app.user.id == post.user.id %}
+                        <div class="d-flex justify-content-around mt-3 mb-4">
+                            <a class="btn btn-primary" href="{{ path('post_edit', {'slug': post.slug}) }}">Modifier</a>
+                            {{ include('post/_delete_form.html.twig') }}
+                        </div>    
+                    {% endif %}
+                {% endif %}
+                <div>
+                    <div class="d-flex mt-5 mb-3">
+                        <h2>Photos</h2>
+                        <a href="" class="btn btn-primary margin">Ajouter</a>
+                    </div>
+                    <div class="d-flex flex-wrap">
+                        {% for i in image %}
+                            <div class="border border-dark image">
+                                <div class="d-flex flex-column">
+                                    <button class="photo"><img src="/uploads/avatar/{{ i.name }}" alt="Slide" width="250" height="167"></button>
+                                    {% if app.user %}
+                                        {% if app.user == i.user %}
+                                            <a class="text-decoration-none text-center" href="">Supprimer l'image</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mb-5 mt-5">
+                        <a href="#" id="loadMediaimage" class="btn btn-primary">Afficher les images</a>
+                        <a href="#" id="hideMediaimage" class="btn btn-primary">Cacher les images</a>
+                    </div>
+                    <div class="d-flex mt-5 mb-3">
+                        <h2>Videos</h2>
+                        <a href="" class="btn btn-primary margin">Ajouter</a>
+                    </div> 
+                    <div class="d-flex flex-wrap">
+                        {% for v in video %}
+                            <div class="border border-dark video">
+                                <div class="d-flex flex-column">
+                                    <button class="photo"><iframe allowfullscreen width="250" height="167"
+                                        src="{{ v.url}}">
+                                    </iframe></button>
+                                    {% if app.user %}
+                                        {% if app.user == v.user %}
+                                            <a class="text-decoration-none text-center" href="">Supprimer la video</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mb-5 mt-5">
+                        <a href="#" id="loadMediavideo" class="btn btn-primary">Afficher les videos</a>
+                        <a href="#" id="hideMediavideo" class="btn btn-primary">Cacher les videos</a>
+                    </div>
+                </div>
+                <div>
+                    {% if app.user %}
+                        {% if is_granted('ROLE_USER') %}
+                            <h2>Commentaires</h2>
+                            <button id="myInput" type="button" class="btn btn-primary mt-5 mb-5" data-toggle="modal" data-target="#exampleModal">
+                                Créer un nouveau commentaire
+                            </button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Créer un commentaire</h5>
+                                            <button id="close" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>                             
+                                            <div class="modal-body">
+                                                {{ form_start(form) }}
+                                                    <section class="text-danger">{{ form_errors(form) }}</section>
+                                                    <section class="form-group">
+                                                        <div class="text-danger">{{ form_errors(form.content) }}</div>
+                                                        {{ form_label(form.content) }}
+                                                        <div>{{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}</div>
+                                                        <small class="form-text text-muted">{{ form_help(form.content) }}</small>
+                                                    </section>
+                                                    <button name="comment_add" class="btn btn-outline-primary mt-3" type="submit">Ajoutez</button>
+                                                {{ form_end(form) }}
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button id="closeFooter" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('login') }}">Connecter vous pour ecrire</a>
+                    {% endif %}
+                </div>
+                {% if comments|length > 0 %}
+                    {% for comment in comments %}
+                        <div class="comment mt-4 text-justify bg-light text-dark pt-2 pb-2 " style="padding-left: 10px;">
+                            <h4><a class="text-decoration-none" href="{{ path('profile', {'id': comment.user.id}) }}">{{ comment.user.prenom|capitalize }} {{ comment.user.nom|capitalize }}</a></h4> <span>{{ comment.createdAt ? comment.createdAt|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY 'à' HH'h' mm'min'",timezone="Europe/Paris") : '' }}</span> <br>
+                            <p>{{ comment.content }}</p>
+                            {% if app.user %}
+                                {% if app.user.id == comment.user.id %}
+                                    <div class="d-flex justify-content-around mt-5">
+                                        <a class="btn btn-primary" href="{{ path('comment_edit', {'id': comment.id, 'slug': post.slug}) }}">Modifier</a>
+                                        {{ include('comment/_delete_form.html.twig') }}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <p class="mt-5 mb-5">aucun commentaire actuellement</p>
+                {% endif %}
+                <div class="mx-auto pagination text-center w-75 mt-5 mb-3">
+                    {% if comments|length > 5 %}
+                        {% if pagination.nbPages > 0 %}
+                            <ul class="pagination">
+                                {% if pagination.page > 1 %}
+                                    <li>
+                                        <a href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'slug': post.slug, 'page': 1})) }}" class="btn btn-primary mx-1">
+                                            1
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path(pagination.nomRoute,
+                                            pagination.paramsRoute|merge({'slug':post.slug, 'page': pagination.page-1})) }}" class="btn btn-primary mx-1">
+                                            Page precedente
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                {# Affichage de toutes les pages entre p-4 et p+4 sauf si < 1 ou > nbPages #}
+                                {% for p in range(max(pagination.page-4, 1), min(pagination.page+4, pagination.nbPages)) %}
+                                    <li {% if p == pagination.page %}class="active"{% endif %}>
+                                        <a class="btn btn-primary mx-1" href="{{ path(pagination.nomRoute, pagination.paramsRoute|merge({'slug': post.slug,'page': p})) }}">
+                                            {{ p }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+
+                                {% if pagination.page < pagination.nbPages %}
+                                    <li>
+                                        <a href="{{ path(pagination.nomRoute,
+                                            pagination.paramsRoute|merge({'slug': post.slug, 'page': pagination.page+1})) }}" class="btn btn-primary mx-1">
+                                            Page suivante
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path(pagination.nomRoute,
+                                            pagination.paramsRoute|merge({'slug' :post.slug, 'page': pagination.nbPages})) }}" class="btn btn-primary mx-1">
+                                            {{ pagination.nbPages }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-2 border rounded bg-primary border-primary ml-5 p-2 position-fixed end-0 height-friend mt-3 overflow-auto">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Vos amis</li>
+                    {% if prenom == null %}
+                        <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+                    {% else %}
+                        {% for p in prenom %}
+                            {% set pseudo = [app.user.prenom, app.user.nom]%}
+                            {% set split = p|split(' ') %}
+                            {% if pseudo == split %}
+    
+                            {% else %}
+                                <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'footer.html.twig' %}
+{% endblock %}

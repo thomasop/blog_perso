@@ -70,7 +70,7 @@
                         {% if post.images != null %}
                             <p>ok</p>
                         {% endif %}
-                        <a class="btn btn-primary" href="">Commentaires</a>
+                        <a class="btn btn-primary" href="{{ path('comment', {slug: post.slug, page: '1'}) }}">Commentaires</a>
                     </div>
                     <div> 
                         {% if app.user %}

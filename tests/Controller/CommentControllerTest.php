@@ -7,7 +7,7 @@ use Symfony\Component\HTTPFoundation\Response;
 use PHPUnit\Framework\TestCase;
 use App\Repository\UserRepository;
 
-class PostControllerTest extends WebTestCase
+class CommentControllerTest extends WebTestCase
 {
     /**
      * @var null
@@ -15,7 +15,7 @@ class PostControllerTest extends WebTestCase
     private $client = null;
 
     /**
-     * Function for test /posts route
+     * Function for test /commentaires/affichages/post0/1 route
      *
      * @return void
      */
@@ -27,7 +27,7 @@ class PostControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@mail.com');
 
         $this->client->loginUser($testUser);
-        $this->client->request('GET', '/posts');
+        $this->client->request('GET', '/commentaires/affichages/post0/1');
         static::assertEquals(
         Response::HTTP_OK,
         $this->client->getResponse()->getStatusCode()
@@ -35,7 +35,31 @@ class PostControllerTest extends WebTestCase
     }
 
     /**
-     * Function for test /posts/modification/post0 route
+     * Function for test /commentaires/affichages/post0/1 route form
+     *
+     * @return void
+     */
+    public function testAddForm(): void
+    {
+        $this->client = static::createClient();
+        
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $testUser = $userRepository->findOneByEmail('admin@mail.com');
+
+        $this->client->loginUser($testUser);
+        $crawler = $this->client->request('GET', '/commentaires/affichages/post0/1');
+        $buttonCrawlerNode = $crawler->selectButton('comment_add');
+        $form = $buttonCrawlerNode->form();
+        $form['comment[content]'] = 'test';
+        $this->client->submit($form);
+        static::assertEquals(
+            Response::HTTP_FOUND,
+            $this->client->getResponse()->getStatusCode()
+            );
+    }
+
+    /**
+     * Function for test /commentaires/modification/1/post0 route
      *
      * @return void
      */
@@ -47,7 +71,7 @@ class PostControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@mail.com');
 
         $this->client->loginUser($testUser);
-        $this->client->request('GET', '/posts/modification/post0');
+        $this->client->request('GET', '/commentaires/modification/1/post0');
         static::assertEquals(
         Response::HTTP_OK,
         $this->client->getResponse()->getStatusCode()
@@ -55,7 +79,7 @@ class PostControllerTest extends WebTestCase
     }
 
     /**
-     * Function for test /posts/modification/post0 route form
+     * Function for test /commentaires/modification/1/post0 route form
      *
      * @return void
      */
@@ -67,20 +91,19 @@ class PostControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@mail.com');
 
         $this->client->loginUser($testUser);
-        $crawler = $this->client->request('GET', '/posts/modification/post0');
-        $buttonCrawlerNode = $crawler->selectButton('edit');
+        $crawler = $this->client->request('GET', '/commentaires/modification/1/post0');
+        $buttonCrawlerNode = $crawler->selectButton('comment_update');
         $form = $buttonCrawlerNode->form();
-        $form['postedit[title]'] = 'title';
-        $form['postedit[content]'] = 'test';
+        $form['comment[content]'] = 'test';
         $this->client->submit($form);
         static::assertEquals(
-            Response::HTTP_SEE_OTHER,
-            $this->client->getResponse()->getStatusCode()
-            );
+        Response::HTTP_SEE_OTHER,
+        $this->client->getResponse()->getStatusCode()
+        );
     }
 
     /**
-     * Function for test /posts/suppression/post2 route
+     * Function for test /commentaires/suppression/1/post0 route
      *
      * @return void
      */
@@ -92,9 +115,9 @@ class PostControllerTest extends WebTestCase
         $testUser = $userRepository->findOneByEmail('admin@mail.com');
 
         $this->client->loginUser($testUser);
-        $this->client->request('GET', '/posts/suppression/post2');
+        $this->client->request('GET', '/commentaires/suppression/1/post0');
         static::assertEquals(
-        Response::HTTP_FOUND,
+        Response::HTTP_SEE_OTHER,
         $this->client->getResponse()->getStatusCode()
         );
     }

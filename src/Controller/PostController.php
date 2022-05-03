@@ -100,7 +100,7 @@ class PostController extends AbstractController
                         'success',
                         'Post modifié!'
                         );
-                    return $this->redirectToRoute('home');
+                    return $this->redirectToRoute('comment', ['slug' => $post->getSlug(), 'page' => 1], Response::HTTP_SEE_OTHER);
                 }
                 return $this->renderForm('post/edit.html.twig', [
                     'post' => $post,
