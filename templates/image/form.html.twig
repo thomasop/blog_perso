@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout de image{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+<div class="container">
+    <div class="row">
+        <h1 class="text-center mt-5 mb-5">Ajouter une image</h1>
+        {{ form_start(form) }}
+            <section class="text-danger">{{ form_errors(form) }}</section>
+            <section class="form-group">
+                <div class="text-danger">{{ form_errors(form.name) }}</div>
+                <label class="mb-3">{{ form_label(form.name) }}</label>
+                <div>{{ form_widget(form.name) }}</div>
+                <small class="form-text text-muted">{{ form_help(form.name) }}</small>
+            </section>        
+            <button name="image" class="btn btn-outline-lg btn-primary mt-3" type="submit">Ajoutez</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+    
+{% include 'footer.html.twig' %}
+{% endblock %}
