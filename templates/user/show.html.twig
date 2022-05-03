@@ -82,6 +82,7 @@
                         {% if app.user %}
                         {% if app.user == user %}
                             <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#test2" role="button" aria-controls="offcanvasExample">Invitations</button>
+                            {{ render(controller('App\\Controller\\FriendController::all')) }}
                         {% else %}
                             {% if friend is not empty %}
                                 {% for f in friend %}
@@ -115,7 +116,7 @@
                                         {% if posts|length > 0 %}
                                             {% for post in posts %}
                                                 <div class="comment mt-4 text-justify float-left"> <img src="https://i.imgur.com/yTFUilP.jpg" alt="" class="rounded-circle" width="40" height="40">
-                                                    <a href="">{{ post.title }}</a><br>
+                                                    <a href="{{ path('comment', {'slug': post.slug, 'page': 1}) }}">{{ post.title }}</a><br>
                                                 </div>
                                             {% endfor %}
                                         {% else %}

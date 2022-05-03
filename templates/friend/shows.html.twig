@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<section>
+    <div class="container">
+        <h1 class="text-center mt-5 mb-5">Liste d'amis</h1>
+        {% if (friend == 0)%}
+            <li class="list-group-item">Ajouter des amis pour discuter avec d'autre membre</li>
+        {% else %}
+            {% for f in friend %}
+                {% set pseudo = [app.user.prenom, app.user.nom]%}
+                {% set split = f|split(' ') %}
+                {% if pseudo == split %}
+
+                {% else %}
+                    <li class="list-group-item"><a href="{{ path('message', {'prenom': split[0], 'nom': split[1] }) }}">{{ split[0]|capitalize }} {{ split[1]|capitalize }}</a></li>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% include 'footer.html.twig' %}
+{% endblock %}

@@ -1,0 +1,38 @@
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="test2" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Mes Invitations</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="dropdown mt-5">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">Envoyé</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% if demandeEnvoyé|length > 0 %}
+                    <li class="dropdown-item"><a class="text-decoration-none" href="{{ path('profile', {'id': app.user.id}) }}">Liste d'amis</a></li>
+                    {% for d in demandeEnvoyé %}
+                        {% if d.statut == 0 %}
+                            <li class="dropdown-item"><a class="text-decoration-none" href="{{ path('profile', {'id': d.receive.id}) }}">{{ d.receive }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <li class="dropdown-item">aucune demande d'invitation reçu</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="dropdown mt-5">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown">Reçu</button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                {% if demandeRecu|length > 0 %}
+                    <li class="dropdown-item"><a class="text-decoration-none" href="{{ path('friend_shows') }}">Liste d'amis</a></li>
+                    {% for c in demandeRecu %}
+                        {% if c.statut == 0 %}
+                            <li class="dropdown-item"><a class="text-decoration-none" href="{{ path('profile', {'id': c.send.id}) }}">{% include 'friend/form_accept.html.twig' %}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <li class="dropdown-item">aucune demande d'invitation reçu</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

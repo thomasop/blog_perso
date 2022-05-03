@@ -87,7 +87,7 @@ class CommentController extends AbstractController
      * @return Response
      */
     #[route('/modification/{id}/{slug}', name: 'comment_edit', methods: ["GET", "POST"])]
-    #[ParamConverter('comment', class: 'App\Entity\comment', options: ['mapping' => ['id' => 'id']])]
+    #[ParamConverter('comment', class: 'App\Entity\Comment', options: ['mapping' => ['id' => 'id']])]
     #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
     public function edit(Comment $comment, Post $post): Response

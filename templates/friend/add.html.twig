@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demande d'ami{% endblock %}
+
+{% block body %}
+{% include 'header.html.twig' %}
+{% include 'flash.html.twig' %}
+<div class="container">
+    <h1 class="text-center mt-5 mb-5">Demande d'ami a {{ user.prenom|capitalize }} {{ user.nom|capitalize }}</h1>
+    {{ form_start(form) }}
+        <section class="text-danger">{{ form_errors(form) }}</section>
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.message) }}</div>
+            <label>{{ form_label(form.message) }}</label>
+            <div>{{ form_widget(form.message, { 'attr': {'class': 'form-control', 'placeholder': 'Champ pas obligatoire',}}) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.message) }}</small>
+        </section>
+        <button name="friend" class="btn btn-primary mb-5 mt-3">{{ button_label|default('Envoyer la demande d\'ami') }}</button>
+    {{ form_end(form) }}
+</div>
+{% include 'footer.html.twig' %}
+{% endblock %}

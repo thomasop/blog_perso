@@ -84,7 +84,7 @@ class PostController extends AbstractController
      * @return Response
      */
     #[route('/modification/{slug}', name: 'post_edit', methods: ["GET", "POST"])]
-    #[ParamConverter('post', options: ['mapping' => ['slug' => 'slug']])]
+    #[ParamConverter('post', class: 'App\Entity\Post', options: ['mapping' => ['slug' => 'slug']])]
     #[IsGranted('ROLE_USER', statusCode: 404, message: 'Vous n\'avez pas accès à cette page')]
     public function edit(Post $post): Response
     {
