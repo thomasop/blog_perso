@@ -19,8 +19,15 @@ security:
             security: false
         main:
             lazy: true
+            user_checker: App\Security\UserChecker
             provider: app_user_provider
-
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: home
+            logout:
+                path: logout
+                target: login
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -30,8 +37,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: /, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/posts, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/commentaires, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/user, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/hasard, roles: IS_AUTHENTICATED_FULLY }
+        - { path: /forgot-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:

@@ -1,0 +1,50 @@
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <figure>
+            <a class="navbar-brand" href="#"><img src="{{ asset('/build/images/flore.02a8017e.png') }}" alt="logo"></a>
+            <figcaption>Blog perso</figcaption>
+        </figure>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="menu navbar-nav mr-auto">
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('home') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('hasard') }}">hasard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('logout') }}">Deconnection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('profile', {'id': app.user.id}) }}">Profile</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('login') }}">Connection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('register') }}">Inscription</a>
+                    </li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item">
+                        <a class="nav-link header-link" href="{{ path('user_index') }}">Utilisateurs</a>
+                    </li>
+                {% endif %}
+            </ul>
+          {% if app.user %}
+              <form action="{{ path('search') }}" method="POST" class="form-header form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="search" name="search" placeholder="Rechercher"
+                    aria-label="Rechercher">
+                  <button name="searchbtn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
+              </form>
+          {% endif %}
+        </div>
+    </nav>
+</header>
