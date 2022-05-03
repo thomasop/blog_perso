@@ -24,11 +24,6 @@
                 {% endif %}
             </ul>
           {% if app.user %}
-              <form action="{{ path('search') }}" method="POST" class="form-header form-inline my-2 my-lg-0">
-                  <input class="form-control mr-sm-2" type="search" name="search" placeholder="Rechercher"
-                    aria-label="Rechercher">
-                  <button name="searchbtn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
-              </form>
           {% endif %}
         </div>
     </nav>

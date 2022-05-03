@@ -12,7 +12,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[Table(name: "userblog")]
 #[ORM\Index(fields: ["prenom"], flags: ["fulltext"])]
 #[ORM\Index(fields: ["nom"], flags: ["fulltext"])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface

@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
         $admin->setRoles(["ROLE_ADMIN"]);
         $admin->setAge(new \DateTime('now'));
         $admin->setSexe(true);
+        $admin->setEnabled(true);
         $manager->persist($admin);
 
         for ($i = 0; $i < 5; $i++) {
