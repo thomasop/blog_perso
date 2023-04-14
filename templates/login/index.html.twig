@@ -3,7 +3,6 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-{% include 'header.html.twig' %}
 {% include 'flash.html.twig' %}
 {% if error %}
     <div class="alert alert-danger">
@@ -16,22 +15,32 @@
         <p class="mt-5 mb-5">Vous étes déjà connecté {{ app.user.prenom|capitalize }} {{ app.user.nom|capitalize }}. <a class="btn btn-primary" href="{{ path('logout') }}">Déconnexion</a></p>
     </div>
 {% else %}
-    <div class="container-md mt-5">
-        <h1 class="text-center mb-5">Connection</h1>
-        <form action="{{ path('login') }}" method="post">
-            <div class="mb-3">
-                <label for="username" class="form-label">Email</label>
-                <input type="email" class="form-control" id="username" aria-describedby="emailHelp" name="_username" value="{{ last_username }}">
-                <div id="emailHelp" class="form-text">Nous ne partagerons jamais votre e-mail avec quelqu'un d'autre.</div>
+    <main>
+        <div class="login">
+            <div class="login__text">
+                <h1 class="login__text--color">bigblog</h1>
+                <h2 class="login__text--h2">Avec BigBlog, partagez et restez en contact avec votre entourage.</h2>
             </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" id="password" name="_password">
-            </div>
+            <div class="login__form">
+                <form action="{{ path('login') }}" method="post">
+                    <div class="mb-3">
+                        {% if last_username is not defined %}
+                            <input type="email" class="form-control" id="username" aria-describedby="emailHelp" name="_username" value="{{ last_username }}" required>
+                        {% else %}
+                            <input type="email" class="form-control" id="username" aria-describedby="emailHelp" name="_username" placeholder="Adresse e-mail ou numéro de tél." required>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password" name="_password" placeholder="Mot de passe" required>
+                    </div>
 
-            <button type="submit" class="btn btn-primary">Connexion</button>
-        </form>
-    </div>
+                    <button type="submit" class="btn btn-primary login__form--btn">Se connecter</button>
+                </form>
+                <p class="login__form--forgot"><a href="">Mot de passe oublié ?</a></p>
+                <div class="login__form--line"></div>
+                <p class="login__form--login"><a href="{{path('register')}}" class="login__form--createlink">Créer nouveau compte</a></p>
+            </div>
+        </div>
+    </main>
 {% endif %}
-{% include 'footer.html.twig' %}
 {% endblock %}

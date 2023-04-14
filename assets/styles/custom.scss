@@ -1,5 +1,14 @@
 header {
     display: flex;
+    height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+p {
+  margin: 0px !important;
 }
 
 header figure {
@@ -117,4 +126,166 @@ nav ul {
 .photo:hover {
     transform: scale(2);
 
+}
+
+.background {
+  background-color: #f0f2f5;
+}
+
+.login {
+  display: flex;
+  justify-content: space-around;
+  margin: 0px 368px;
+  padding-bottom: 150px;
+  padding-top: 92px;
+
+}
+
+.create {
+  display: flex;
+  justify-content: space-around;
+  margin: 0px 368px;
+  padding-top: 92px;
+}
+
+.login__form {
+  width: 400px;
+  background-color: white;
+  align-items: center;
+  background-color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+}
+
+.login__form form {
+  padding: 25px 25px 0px 25px;
+}
+
+.login__form--btn {
+  width: 100%;
+  height: 48px;
+  border-radius: 6px;
+}
+
+.login__text--color {
+  color: #1877f2;
+}
+
+.login__text--h2 {
+  font-family: SFProDisplay-Regular, Helvetica, Arial, sans-serif;
+  font-size: 28px;
+  font-weight: normal;
+  line-height: 32px;
+  width: 500px;
+}
+
+.login__form--line {
+  align-items: center;
+  border-bottom: 1px solid #dadde1;
+  display: flex;
+  margin: 25px 16px;
+  text-align: center;
+}
+
+.login__form--forgot {
+  padding-top: 20px;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+}
+
+.login__form--forgot:hover {
+  text-decoration: underline;
+}
+
+.login__form--create {
+  display: block;
+  background-color: #36a420;
+  border-color: #36a420;
+  width: 220px;
+  border: none;
+  border-radius: 6px;
+  height: 48px;
+  font-size: 17px;
+  line-height: 48px;
+  text-align: center;
+  margin: 0px 50px 24px 50px !important;
+}
+
+.login__form--login {
+  display: block;
+  background-color: #36a420;
+  border-color: #36a420;
+  width: 220px;
+  border: none;
+  border-radius: 6px;
+  height: 48px;
+  font-size: 17px;
+  line-height: 48px;
+  text-align: center;
+  margin: 0px 90px 24px 90px !important;
+}
+
+.create__form--login {
+  display: block;
+  background-color: #36a420;
+  width: 300px;
+  border-color: #36a420;
+  border: none;
+  border-radius: 6px;
+  height: 48px;
+  font-size: 17px;
+  line-height: 48px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+}
+
+.login__form--createlink {
+  display: block;
+  background-color: #36a420;
+  border-color: #36a420;
+  width: 220px;
+  border: none;
+  border-radius: 6px;
+  height: 48px;
+  font-size: 17px;
+  line-height: 48px;
+  padding: 0 16px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+}
+
+.create__form {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 432px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+  height: 593px;
+}
+
+.create__form--line {
+  align-items: center;
+  border-bottom: 1px solid #dadde1;
+  display: flex;
+  text-align: center;
+  margin: 10px 0px;
+}
+
+.btn-create {
+  border-radius: 5px;
+  text-align: center;
+  background-color: #1877f2;
+  color: white;
+  margin: 0px 70px;
+  padding: 10px 80px;
+  border: none;
+  margin-top: 20px;
 }

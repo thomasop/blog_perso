@@ -3,14 +3,73 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-{% include 'header.html.twig' %}
 {% include 'flash.html.twig' %}
-<div class="container mt-5">
-    <h1 class="text-center mb-5">Inscription</h1>
-
-    {{ include('user/_form.html.twig') }}
-
-    <a class="btn btn-primary mt-3" href="{{ path('login') }}">Retour à la page de connexion</a>
-</div>
-{% include 'footer.html.twig' %}
+{% if app.user %}
+    <div class="container">
+        <h1 class="text-center mt-5">Déjà connecté</h1>
+        <p class="mt-5 mb-5">Vous étes déjà connecté {{ app.user.prenom|capitalize }} {{ app.user.nom|capitalize }}. <a class="btn btn-primary" href="{{ path('logout') }}">Déconnexion</a></p>
+    </div>
+{% else %}
+<main>
+    <div class="create">
+            <div class="login__text">
+                <h1 class="login__text--color">bigblog</h1>
+                <h2 class="login__text--h2">Avec BigBlog, partagez et restez en contact avec votre entourage.</h2>
+            </div>
+            <div class="login__form">
+                {{ form_start(form) }}
+        <section class="text-danger">{{ form_errors(form) }}</section>
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.prenom) }}</div>
+            {{ form_label(form.prenom) }}
+            <div>{{ form_widget(form.prenom, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.prenom) }}</small>
+        </section>  
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.nom) }}</div>
+            {{ form_label(form.nom) }}
+            <div>{{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.nom) }}</small>
+        </section>   
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.email) }}</div>
+            {{ form_label(form.email) }}
+            <div>{{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.email) }}</small>
+        </section>   
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.password) }}</div>
+            {{ form_label(form.password) }}
+            <div>{{ form_widget(form.password, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.password) }}</small>
+        </section>
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.avatar) }}</div>
+            {{ form_label(form.avatar) }}
+            <div>{{ form_widget(form.avatar, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.avatar) }}</small>
+        </section> 
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.age) }}</div>
+            {{ form_label(form.age) }}
+            <div>{{ form_widget(form.age, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.age) }}</small>
+        </section>
+        <section class="form-group">
+            <div class="text-danger">{{ form_errors(form.sexe) }}</div>
+            {{ form_label(form.sexe) }}
+            <div>{{ form_widget(form.sexe, { 'attr': {'class': 'form-control'} }) }}</div>
+            <small class="form-text text-muted">{{ form_help(form.sexe) }}</small>
+        </section>
+        <section class="form-group">
+            {{ form_label(form.submit) }}
+            <div>{{ form_widget(form.submit, { 'attr': {'class': 'form-control', 'class': 'btn-create'} }) }}</div>
+        </section> 
+    {{ form_end(form) }}
+                <div class="login__form--line"></div>
+                <p class="login__form--create"><a href="{{ path('login') }}" class="create__form--login">Retour à la page de connexion</a></p>
+            </div>
+        </div>
+</main>
+{% endif %}
 {% endblock %}

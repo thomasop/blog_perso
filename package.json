@@ -21,6 +21,12 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@popperjs/core": "2.11.2"
-    }
+        "@popperjs/core": "2.11.2",
+        "jquery": "^3.6.4"
+    },
+    "name": "blog_perso",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/thomasop/blog_perso.git",
+    "author": "thomasop <tdss33@hotmail.com>"
 }
