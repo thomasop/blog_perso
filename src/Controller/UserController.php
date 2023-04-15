@@ -27,6 +27,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UserController extends AbstractController
@@ -37,12 +39,14 @@ class UserController extends AbstractController
     private $tokenStorage;
     /** @var FormUserHandler */
     private $formUserHandler;
+    private $slugger;
 
-    public function __construct(UserPasswordHasherInterface $passwordEncoder, TokenStorageInterface $tokenStorage, FormUserHandler $formUserHandler)
+    public function __construct(UserPasswordHasherInterface $passwordEncoder, TokenStorageInterface $tokenStorage, FormUserHandler $formUserHandler, SluggerInterface $slugger)
     {
         $this->passwordEncoder = $passwordEncoder;
         $this->tokenStorage = $tokenStorage;
         $this->formUserHandler = $formUserHandler;
+        $this->slugger = $slugger;
     }
 
     #[route('/user/display', name: 'user_index')]
@@ -102,8 +106,17 @@ class UserController extends AbstractController
                 $image = 'defaultavatar.png';
                 $user->setAvatar($image);
             } else {
-                $newAvatar = $this->fileUploader->upload($image);
-                $user->setAvatar($newAvatar);
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+                try {
+                    $image->move(
+                        $this->getParameter('pictures_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+                $user->setAvatar($newFilename);
             }
             $user->setToken($this->generateToken());
             $age = $form->get('age')->getData();

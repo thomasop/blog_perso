@@ -5,6 +5,12 @@ namespace App\Tool;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Entity\Product;
+use App\Form\ProductType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class FileUploader
 {
@@ -26,7 +32,7 @@ class FileUploader
         $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
         try {
             $file->move(
-                $this->getTargetDirectory(),
+                $this->getP(),
                 $newFilename
             );
         } catch (FileException $e) {
